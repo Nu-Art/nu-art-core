@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class FileTools {
 
@@ -350,5 +352,51 @@ public class FileTools {
 
 			searchForFile(file, matchCondition, sourceFiles);
 		}
+	}
+
+	public static void archive(File output, File... filesToZip)
+			throws IOException {
+		byte[] buffer = new byte[1024];
+
+		FileOutputStream fos = null;
+		FileInputStream in = null;
+		try {
+			fos = new FileOutputStream(output);
+			ZipOutputStream zos = new ZipOutputStream(fos);
+			for (File file : filesToZip) {
+				ZipEntry ze = new ZipEntry(file.getName());
+				zos.putNextEntry(ze);
+				in = new FileInputStream(file);
+				int len;
+				while ((len = in.read(buffer)) > 0) {
+					zos.write(buffer, 0, len);
+				}
+
+				in.close();
+				in = null;
+				zos.closeEntry();
+			}
+			zos.close();
+		} finally {
+			if (fos != null)
+				try {
+					fos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+			if (in != null)
+				try {
+					in.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		}
+	}
+
+	public static void renameFile(File origin, File target)
+			throws IOException {
+		if (!origin.renameTo(target))
+			throw new IOException("Unable to rename file from: " + origin.getName() + " => " + target.getName());
 	}
 }
