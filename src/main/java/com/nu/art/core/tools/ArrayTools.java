@@ -29,7 +29,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-@SuppressWarnings( {"unused",
+@SuppressWarnings( {
+											 "unused",
 											 "unchecked"
 									 })
 public class ArrayTools {
@@ -90,7 +91,11 @@ public class ArrayTools {
 		return toRet;
 	}
 
-	public static <T> T[] removeElement(T[] arr, T... toRemoves) {
+	public static <T> T[] removeElement(T[] arr, T toRemoves) {
+		return removeElements(arr, toRemoves);
+	}
+
+	public static <T> T[] removeElements(T[] arr, T... toRemoves) {
 		ArrayList<T> temp = new ArrayList<>();
 		temp.addAll(Arrays.asList(arr));
 		for (T toRemove : toRemoves) {
