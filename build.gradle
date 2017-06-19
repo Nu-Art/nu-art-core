@@ -16,47 +16,96 @@
  * limitations under the License.
  */
 
-def group = 'com.nu.art.core'
-def artifact = 'nu-art-core'
-def version = '1.0.0'
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'signing'
 
 tasks.withType(JavaCompile) {
     sourceCompatibility = JavaVersion.VERSION_1_7
     targetCompatibility = JavaVersion.VERSION_1_7
 }
 
-//uploadArchives {
-//    repositories {
-//        mavenDeployer {
-//            def finalPath = 'file://' + LocalMavenRepoPath.toString()
-//            repository url: finalPath
-//            pom.groupId = group
-//            pom.artifactId = artifact
-//            pom.version = version
-//            pom.packaging = 'jar'
-//        }
-//    }
-//}
+group = "com.nu-art-software"
+archivesBaseName = name
+version = "1.0.0"
+
+signing {
+    sign configurations.archives
+}
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
-    archiveName = artifact + "-" + version + "-src.jar"
     from sourceSets.main.allSource
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
-    archiveName = artifact + "-" + version + "-doc.jar"
-    from javadoc.destinationDir
-}
-
-jar {
-    archiveName = artifact + "-" + version + ".jar"
+    from javadoc
 }
 
 artifacts {
     archives sourcesJar
     archives javadocJar
+}
+
+def gpgKeyId = System.getenv('GPG_KEY_ID')
+def gpgPassword = System.getenv('GPG_KEY_PASSWORD')
+def gpgFile = System.getenv('PATH_TO_GPG_FILE')
+
+printf "gpgKeyId: ${gpgKeyId}"
+printf "gpgPassword: ${gpgPassword.replace("%", "%%")}"
+printf " gpgFile: ${gpgFile}"
+
+ext."signing.gpgKeyId" = gpgKeyId
+ext."signing.password" = gpgPassword
+ext."signing.secretKeyRingFile" = gpgFile
+
+uploadArchives {
+    def userName = System.getenv('OSSRH_USER_NAME');
+    def password = System.getenv('OSSRH_PASSWORD');
+
+
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: userName, password: password)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: userName, password: password)
+            }
+
+            pom.project {
+                name 'nu-art-core'
+                packaging 'jar'
+
+                // optionally artifactId can be defined here
+                description 'A collection of core tools I use'
+                url 'http://github.com/nu-art/nu-art-core'
+
+                scm {
+                    connection 'scm:git:git://github.com/nu-art/nu-art-core.git'
+                    developerConnection 'scm:git:ssh://github.com/nu-art/nu-art-core.git'
+                    url 'http://github.com/nu-art/nu-art-core/tree/master'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'TacB0sS'
+                        name 'Adam van der Kruk'
+                        email 'adam.vdk@nu-art-software.com'
+                    }
+                }
+            }
+        }
+    }
 }
