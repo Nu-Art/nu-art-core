@@ -78,6 +78,14 @@ public class ArrayTools {
 		return appendElement(arr, element);
 	}
 
+	public static <T> T[] appendElements(T[] arr, T... elements) {
+		T[] toRet = Arrays.copyOf(arr, arr.length + elements.length);
+		for (int i = 0; i < elements.length; i++) {
+			toRet[arr.length + i] = elements[i];
+		}
+		return toRet;
+	}
+
 	public static <T> T[] appendElement(T[] arr, T element) {
 		T[] toRet = Arrays.copyOf(arr, arr.length + 1);
 		toRet[arr.length] = element;
