@@ -136,6 +136,18 @@ public class ArrayTools {
 		return temp.toArray(newInstance(arrayType, temp.size()));
 	}
 
+	@SuppressWarnings( {"SynchronizationOnLocalVariableOrMethodParameter"})
+	public static <SuperType, Type> SuperType[] asFilteredArray(Type[] arrayToFilter, Class<SuperType> arrayType) {
+		ArrayList<SuperType> temp = new ArrayList<>();
+		synchronized (arrayToFilter) {
+			for (Type item : arrayToFilter) {
+				if (arrayType.isAssignableFrom(item.getClass()))
+					temp.add((SuperType) item);
+			}
+		}
+		return temp.toArray(newInstance(arrayType, temp.size()));
+	}
+
 	public static <SuperType, ArrayType extends SuperType> SuperType[] asArray(Collection<ArrayType> collection, Class<SuperType> arrayType) {
 		return collection.toArray(newInstance(arrayType, collection.size()));
 	}
