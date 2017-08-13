@@ -29,10 +29,15 @@ public class MathTools {
 	}
 
 	public static float calcAverage(float[] values) {
+		float sum = sum(values);
+		return sum / values.length;
+	}
+
+	public static float sum(float[] values) {
 		float sum = 0;
 		for (float value : values) {
 			sum += value;
 		}
-		return sum / values.length;
+		return sum;
 	}
 }
