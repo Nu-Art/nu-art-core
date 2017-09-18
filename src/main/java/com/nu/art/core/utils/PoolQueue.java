@@ -18,24 +18,26 @@
 
 package com.nu.art.core.utils;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Vector;
 
-@SuppressWarnings( {"unused", "unchecked"
-				   })
+@SuppressWarnings( {
+											 "unused",
+											 "unchecked"
+									 })
 public abstract class PoolQueue<Type> {
-
-	private Vector<Type> items = new Vector<>();
 
 	private volatile boolean keepAlive = true;
 
-	private Vector<Thread> threads = new Vector<>();
+	private final ArrayList<Thread> threadPool = new ArrayList<>();
+
+	private final ArrayList<Type> itemsQueue = new ArrayList<>();
 
 	private final Runnable queueAction = new Runnable() {
 
 		@Override
 		public final void run() {
-			threads.add(Thread.currentThread());
+			addThreadToPool();
 			while (keepAlive) {
 				Type item = getNextItem();
 				if (item == null) {
@@ -47,27 +49,45 @@ public abstract class PoolQueue<Type> {
 					onExecutionError(item, e);
 				}
 			}
-			threads.remove(Thread.currentThread());
+			removeThreadFromPool();
 		}
 	};
 
-	protected synchronized Type getNextItem() {
-		if (items.size() == 0) {
-			try {
-				wait();
-			} catch (InterruptedException ignore) {}
-			return null;
+	private boolean addThreadToPool() {
+		synchronized (this.itemsQueue) {
+			return threadPool.add(Thread.currentThread());
 		}
+	}
 
-		return items.remove(0);
+	private boolean removeThreadFromPool() {
+		synchronized (this.itemsQueue) {
+			return threadPool.remove(Thread.currentThread());
+		}
+	}
+
+	private Type getNextItem() {
+		synchronized (this.itemsQueue) {
+			if (itemsQueue.size() == 0) {
+				try {
+					this.itemsQueue.wait();
+				} catch (InterruptedException ignore) {}
+				return null;
+			}
+
+			return itemsQueue.remove(0);
+		}
 	}
 
 	protected final Thread[] getThreads() {
-		return threads.toArray(new Thread[threads.size()]);
+		synchronized (this.itemsQueue) {
+			return threadPool.toArray(new Thread[threadPool.size()]);
+		}
 	}
 
 	public final boolean isAlive() {
-		return keepAlive;
+		synchronized (this.itemsQueue) {
+			return keepAlive;
+		}
 	}
 
 	protected abstract void onExecutionError(Type item, Throwable e);
@@ -75,52 +95,74 @@ public abstract class PoolQueue<Type> {
 	protected abstract void executeAction(Type type)
 			throws Exception;
 
-	public synchronized final void kill() {
-		keepAlive = false;
-		notifyAll();
-		clear();
-	}
-
-	public synchronized final boolean contains(Type item) {
-		return items.contains(item);
-	}
-
-	public synchronized final void addItemIfNotInQueue(Type item) {
-		if (!contains(item))
-			addItem(item);
-	}
-
-	public synchronized final void moveToHeadOfQueue(Type... items) {
-		for (int i = items.length - 1; i >= 0; i--) {
-			removeItem(items[i]);
-			addFirst(items[i]);
+	public final void kill() {
+		synchronized (this.itemsQueue) {
+			keepAlive = false;
+			this.itemsQueue.notifyAll();
+			clear();
 		}
 	}
 
-	public synchronized final void addItem(Type... items) {
-		Collections.addAll(this.items, items);
-		notify();
+	public final boolean contains(Type item) {
+		synchronized (this.itemsQueue) {
+			return itemsQueue.contains(item);
+		}
 	}
 
-	public synchronized final void addFirst(Type item) {
-		items.add(0, item);
-		notify();
+	public final void addItemIfNotInQueue(Type item) {
+		synchronized (this.itemsQueue) {
+			if (contains(item))
+				return;
+
+			addItem(item);
+		}
+	}
+
+	public final void moveToHeadOfQueue(Type... items) {
+		synchronized (this.itemsQueue) {
+			for (int i = items.length - 1; i >= 0; i--) {
+				removeItem(items[i]);
+				addFirst(items[i]);
+			}
+		}
+	}
+
+	public final void addItem(Type... items) {
+		synchronized (this.itemsQueue) {
+			Collections.addAll(this.itemsQueue, items);
+			this.itemsQueue.notify();
+		}
+	}
+
+	public final void addFirst(Type item) {
+		synchronized (this.itemsQueue) {
+			itemsQueue.add(0, item);
+			this.itemsQueue.notify();
+		}
 	}
 
 	public final boolean removeItem(Type item) {
-		return items.remove(item);
+		synchronized (this.itemsQueue) {
+			return itemsQueue.remove(item);
+		}
 	}
 
 	public final Type removeItem(int index) {
-		return items.remove(index);
+		synchronized (this.itemsQueue) {
+			return itemsQueue.remove(index);
+		}
 	}
 
 	public final int getItemsCount() {
-		return items.size();
+		synchronized (this.itemsQueue) {
+			return itemsQueue.size();
+		}
 	}
 
 	public final void clear() {
-		items.clear();
+		synchronized (this.itemsQueue) {
+			itemsQueue.clear();
+		}
 	}
 
 	public final void createThreads(String name) {
