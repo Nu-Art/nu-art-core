@@ -48,7 +48,6 @@ public class RegexAnalyzer {
 		return RegexAnalyzer.findRegex(fullText, caseSensitive, false, regexToFind).length > 0;
 	}
 
-
 	private static final String[] findRegex(String fullText, boolean caseSensitive, boolean stopOnFirst, String... regexToFind) {
 		Vector<String> toRet = new Vector<>();
 		RegexAnalyzer fr = new RegexAnalyzer("", caseSensitive);

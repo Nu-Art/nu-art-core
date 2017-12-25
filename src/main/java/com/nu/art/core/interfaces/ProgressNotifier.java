@@ -25,7 +25,6 @@ package com.nu.art.core.interfaces;
  */
 public interface ProgressNotifier {
 
-
 	/**
 	 * Reports the ending of the progress.
 	 */

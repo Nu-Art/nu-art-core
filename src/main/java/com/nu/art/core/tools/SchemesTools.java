@@ -24,6 +24,5 @@ public class SchemesTools {
 
 	public static final com.nu.art.core.utils.RegexAnalyzer HTTP_RegexAnalizer = new com.nu.art.core.utils.RegexAnalyzer("(?:http|https)://");
 
-	public static final com.nu.art.core.utils.RegexAnalyzer LocalOrUNC_RegexAnalizer = new com.nu.art.core.utils.RegexAnalyzer("(?:([a-zA-Z]{1}:/)|(//\\d+.\\d+.\\d+" + "" +
-			".\\d+/[a-zA-Z]{1}\\$/))");
+	public static final com.nu.art.core.utils.RegexAnalyzer LocalOrUNC_RegexAnalizer = new com.nu.art.core.utils.RegexAnalyzer("(?:([a-zA-Z]{1}:/)|(//\\d+.\\d+.\\d+" + "" + ".\\d+/[a-zA-Z]{1}\\$/))");
 }

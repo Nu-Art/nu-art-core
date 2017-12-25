@@ -18,7 +18,6 @@
 
 package com.nu.art.core.file;
 
-
 public enum Charsets {
 	UTF_8("UTF-8"),
 	UTF_16("UTF-16"),

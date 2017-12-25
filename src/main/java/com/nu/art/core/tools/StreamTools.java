@@ -39,6 +39,7 @@ public class StreamTools {
 	 * @param inputStreamSize  The stream input size
 	 * @param outputStream     The output stream to write to.
 	 * @param progressNotifier To notify for updates.
+	 *
 	 * @throws IOException
 	 */
 	public static void copy(InputStream inputStream, long inputStreamSize, OutputStream outputStream, ProgressNotifier progressNotifier)
@@ -70,7 +71,9 @@ public class StreamTools {
 	 * Reads the given input stream fully and return the byte[] of this stream.
 	 *
 	 * @param inputStream the input stream to read
+	 *
 	 * @return the stream as byte[]
+	 *
 	 * @throws IOException
 	 */
 	public static byte[] readFully(InputStream inputStream)
@@ -91,7 +94,9 @@ public class StreamTools {
 	 * Reads the given input stream fully and return the byte[] of this stream.
 	 *
 	 * @param inputStream the input stream to read
+	 *
 	 * @return the stream as string
+	 *
 	 * @throws IOException
 	 */
 	public static String readFullyAsString(InputStream inputStream)
@@ -114,6 +119,7 @@ public class StreamTools {
 	 * {@link Long}<br>
 	 *
 	 * @param _value The value to parse
+	 *
 	 * @return A byte array of the supplied value.
 	 */
 	public static byte[] toByteArray(Number _value) {
@@ -150,6 +156,7 @@ public class StreamTools {
 	 * {@link Long}<br>
 	 *
 	 * @param byteArray The byte array with the value to parse.
+	 *
 	 * @return The value which rests within the supplied byte array
 	 */
 	public static long fromByteArray(byte[] byteArray) {

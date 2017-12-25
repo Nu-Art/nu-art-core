@@ -28,7 +28,11 @@ import com.nu.art.core.utils.RegexAnalyzer;
  */
 public final class VersionRange {
 
-	private static final String[] VersionParameter = new String[]{"Release", "Mile-Stone", "Build"};
+	private static final String[] VersionParameter = new String[]{
+			"Release",
+			"Mile-Stone",
+			"Build"
+	};
 
 	private static final String VersionIndexRegex = "(?:(?:(?:(\\d+)\\s*-\\s*(\\d+))+)|(\\d+)|(\\*))";
 

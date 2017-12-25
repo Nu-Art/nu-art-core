@@ -18,7 +18,6 @@
 
 package com.nu.art.core.exceptions;
 
-
 public class RuntimeInternalException
 		extends RuntimeException {
 

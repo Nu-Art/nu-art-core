@@ -27,7 +27,6 @@ package com.nu.art.core.utils;
 public class RunnableQueue
 		extends PoolQueue<Runnable> {
 
-
 	@Override
 	protected void onExecutionError(Runnable item, Throwable e) {
 		e.printStackTrace();

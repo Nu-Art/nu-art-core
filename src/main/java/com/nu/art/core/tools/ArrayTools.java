@@ -106,6 +106,7 @@ public class ArrayTools {
 	public static <T> T[] removeElements(T[] arr, T... toRemoves) {
 		return removeElements(arr, Arrays.asList(toRemoves));
 	}
+
 	public static <T> T[] removeElements(T[] arr, List<T> toRemoves) {
 		ArrayList<T> temp = new ArrayList<>();
 		temp.addAll(Arrays.asList(arr));
