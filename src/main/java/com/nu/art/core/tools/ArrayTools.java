@@ -68,16 +68,11 @@ public class ArrayTools {
 
 	/**
 	 * @param arr     original Array
-	 * @param element element to add
+	 * @param elements element to add
 	 * @param <T>     The base type of the array
 	 *
 	 * @return A new array composed of the original and the new element
 	 */
-	@Deprecated
-	public static <T> T[] append(T[] arr, T element) {
-		return appendElement(arr, element);
-	}
-
 	public static <T> T[] appendElements(T[] arr, T... elements) {
 		T[] toRet = Arrays.copyOf(arr, arr.length + elements.length);
 		for (int i = 0; i < elements.length; i++) {
