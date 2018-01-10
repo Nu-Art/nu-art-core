@@ -67,9 +67,9 @@ public class ArrayTools {
 	}
 
 	/**
-	 * @param arr     original Array
+	 * @param arr      original Array
 	 * @param elements element to add
-	 * @param <T>     The base type of the array
+	 * @param <T>      The base type of the array
 	 *
 	 * @return A new array composed of the original and the new element
 	 */
