@@ -119,6 +119,8 @@ public class FileTools {
 	private static void copyFileTo(File source, File destinationFolder)
 			throws IOException {
 		File newFile = new File(destinationFolder, source.getName());
+		createNewFile(newFile);
+
 		FileInputStream inputStream = null;
 		FileOutputStream outputStream = null;
 		try {
@@ -129,7 +131,7 @@ public class FileTools {
 			try {
 				if (inputStream != null)
 					inputStream.close();
-			} catch (IOException e) {
+			} catch (IOException ignore) {
 			}
 
 			try {
