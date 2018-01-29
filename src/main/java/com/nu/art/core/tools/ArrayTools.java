@@ -49,18 +49,22 @@ public class ArrayTools {
 
 	@SafeVarargs
 	public static <T> String join(Function<T, String> toString, String delimiter, T... elements) {
-		String toRet = "";
+		StringBuilder toRet = new StringBuilder();
 		for (T item : elements) {
-			toRet += toString.map(item);
+			toRet.append(toString.map(item));
 			if (item != elements[elements.length - 1])
-				toRet += delimiter;
+				toRet.append(delimiter);
 		}
-		return toRet;
+		return toRet.toString();
 	}
 
 	public static <From, To> To[] map(Class<To> toTypeArray, Function<From, To> mapper, From... source) {
-		To[] target = newInstance(toTypeArray, source.length);
-		for (int i = 0; i < source.length; i++) {
+		int arrayLength = 0;
+		if (source != null)
+			arrayLength = source.length;
+
+		To[] target = newInstance(toTypeArray, arrayLength);
+		for (int i = 0; i < arrayLength; i++) {
 			target[i] = mapper.map(source[i]);
 		}
 		return target;
@@ -105,9 +109,7 @@ public class ArrayTools {
 	public static <T> T[] removeElements(T[] arr, List<T> toRemoves) {
 		ArrayList<T> temp = new ArrayList<>();
 		temp.addAll(Arrays.asList(arr));
-		for (T toRemove : toRemoves) {
-			temp.remove(toRemove);
-		}
+		temp.removeAll(toRemoves);
 		return asArray(temp, (Class<T>) arr.getClass().getComponentType());
 	}
 
