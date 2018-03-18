@@ -367,6 +367,8 @@ public class FileTools {
 			ZipOutputStream zos = new ZipOutputStream(fos);
 			for (File file : filesToZip) {
 				ZipEntry ze = new ZipEntry(file.getName());
+				ze.setTime(file.lastModified());
+				ze.setSize(file.length());
 				zos.putNextEntry(ze);
 				in = new FileInputStream(file);
 				int len;
