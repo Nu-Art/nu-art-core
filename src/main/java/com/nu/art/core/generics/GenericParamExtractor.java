@@ -31,19 +31,6 @@ public class GenericParamExtractor {
 		throw new MUST_NeverHappenedException("Error extracting processor generic parameter fields for runtime use");
 	}
 
-	private Class<?> getListOfTypes()
-		throws ClassNotFoundException {
-		try {
-			return Class.forName("sun.reflect.generics.reflectiveObjects.ListOfTypes");
-		} catch (Throwable ignore) {}
-
-		try {
-			return Class.forName("org.apache.harmony.luni.lang.reflect.ListOfTypes");
-		} catch (Throwable e) {
-			throw new MUST_NeverHappenedException("Error extracting processor generic parameter fields for runtime use", e);
-		}
-	}
-
 	@SuppressWarnings("unchecked")
 	public <T, K> Class<K> extractGenericType(Class<T> type, T instance, int index) {
 		try {
