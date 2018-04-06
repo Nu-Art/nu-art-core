@@ -26,7 +26,7 @@ import java.util.Vector;
  * @author TacB0sS
  */
 public final class Version
-		implements VersionUpdateListener {
+	implements VersionUpdateListener {
 
 	private static final long serialVersionUID = -5627960243757371642L;
 
@@ -148,7 +148,7 @@ public final class Version
 	}
 
 	public void setVersion(String initialVersion)
-			throws BadVersionFormat {
+		throws BadVersionFormat {
 		try {
 			int index = initialVersion.indexOf(".");
 			release = Short.parseShort(initialVersion.substring(0, index));

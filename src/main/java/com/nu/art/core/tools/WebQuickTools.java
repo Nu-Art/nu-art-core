@@ -38,7 +38,7 @@ public class WebQuickTools {
 	// }
 
 	public static byte[] readFully(InputStream inputStream)
-			throws IOException {
+		throws IOException {
 		ByteArrayOutputStream bos;
 		BufferedOutputStream out = new BufferedOutputStream(bos = new ByteArrayOutputStream(inputStream.available()), 1024);
 		byte[] buffer = new byte[1024];

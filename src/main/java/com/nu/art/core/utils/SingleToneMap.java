@@ -21,9 +21,9 @@ package com.nu.art.core.utils;
 import java.util.HashMap;
 
 @SuppressWarnings( {
-											 "rawtypes",
-											 "unchecked"
-									 })
+	                   "rawtypes",
+	                   "unchecked"
+                   })
 public final class SingleToneMap {
 
 	protected final HashMap<Class<?>, HashMap> maps = new HashMap<>();

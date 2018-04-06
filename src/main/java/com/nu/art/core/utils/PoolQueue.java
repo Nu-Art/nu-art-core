@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 @SuppressWarnings( {
-											 "unused",
-											 "unchecked"
-									 })
+	                   "unused",
+	                   "unchecked"
+                   })
 public abstract class PoolQueue<Type> {
 
 	private volatile boolean keepAlive = true;
@@ -93,7 +93,7 @@ public abstract class PoolQueue<Type> {
 	protected abstract void onExecutionError(Type item, Throwable e);
 
 	protected abstract void executeAction(Type type)
-			throws Exception;
+		throws Exception;
 
 	public final void kill() {
 		synchronized (this.itemsQueue) {

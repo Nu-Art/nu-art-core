@@ -29,9 +29,9 @@ import com.nu.art.core.utils.RegexAnalyzer;
 public final class VersionRange {
 
 	private static final String[] VersionParameter = new String[]{
-			"Release",
-			"Mile-Stone",
-			"Build"
+		"Release",
+		"Mile-Stone",
+		"Build"
 	};
 
 	private static final String VersionIndexRegex = "(?:(?:(?:(\\d+)\\s*-\\s*(\\d+))+)|(\\d+)|(\\*))";
@@ -98,7 +98,7 @@ public final class VersionRange {
 	}
 
 	public void setVersion(String initialVersion)
-			throws com.nu.art.core.version.BadVersionFormat {
+		throws com.nu.art.core.version.BadVersionFormat {
 		try {
 			String[] version = validateVersion(initialVersion);
 			release = version[0];
@@ -115,7 +115,7 @@ public final class VersionRange {
 	}
 
 	private String[] validateVersion(String initialVersion)
-			throws com.nu.art.core.version.BadVersionFormat {
+		throws com.nu.art.core.version.BadVersionFormat {
 		String[] version = initialVersion.split("\\.", 3);
 		if (version.length != 3) {
 			throw new com.nu.art.core.version.BadVersionFormat("Version syntax should be: {x,y-z}.{*}.{*}, and not: " + initialVersion);

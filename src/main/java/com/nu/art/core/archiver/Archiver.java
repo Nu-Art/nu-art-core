@@ -39,12 +39,12 @@ import java.util.jar.Manifest;
 public class Archiver {
 
 	public final void archiveToFile(String archiveFile, Manifest manifest, String... filesToArchive)
-			throws IOException {
+		throws IOException {
 		archiveToFile(new File(archiveFile), manifest, filesToArchive);
 	}
 
 	private void archiveToFile(File archiveFile, Manifest manifest, String... filesToArchive)
-			throws IOException {
+		throws IOException {
 		File[] files = new File[filesToArchive.length];
 		for (int i = 0; i < files.length; i++) {
 			files[i] = new File(filesToArchive[i]);
@@ -53,7 +53,7 @@ public class Archiver {
 	}
 
 	public final void archiveToFile(File archiveFile, Manifest manifest, File... filesToArchive)
-			throws IOException {
+		throws IOException {
 		if (filesToArchive.length == 0)
 			throw new IOException("Files NOT Specified");
 
@@ -95,7 +95,7 @@ public class Archiver {
 	}
 
 	private void writeFilesIntoArchive(JarOutputStream jos, File parentFile, File... files)
-			throws IOException {
+		throws IOException {
 		for (File file : files) {
 			if (file.isDirectory()) {
 				writeFilesIntoArchive(jos, parentFile, file.listFiles());
@@ -106,7 +106,7 @@ public class Archiver {
 	}
 
 	private void writeIntoJar(JarOutputStream jos, File parentFile, File toArchive)
-			throws IOException {
+		throws IOException {
 		String relativePath = toArchive.getAbsolutePath().replace(parentFile.getAbsolutePath(), "").replace(File.separator, "/");
 		relativePath = relativePath.substring(1);
 		FileInputStream fis = null;
@@ -126,12 +126,12 @@ public class Archiver {
 	}
 
 	public final void extractToFolder(String archiveFile, String openInFolder)
-			throws IOException {
+		throws IOException {
 		extractToFolder(new File(archiveFile), new File(openInFolder));
 	}
 
 	public final void extractToFolder(File archiveFile, File openInFolder)
-			throws IOException {
+		throws IOException {
 		FileInputStream fis = null;
 		try {
 			if (!archiveFile.exists())
@@ -149,7 +149,7 @@ public class Archiver {
 	}
 
 	public final void extractToFolder(InputStream archiveStream, File openInFolder)
-			throws IOException {
+		throws IOException {
 		JarInputStream jis = null;
 		try {
 			if (!openInFolder.exists())
@@ -168,7 +168,7 @@ public class Archiver {
 	}
 
 	private void readFilesFromArchive(JarInputStream jis, File outputFolder)
-			throws IOException {
+		throws IOException {
 		JarEntry entry;
 		while ((entry = jis.getNextJarEntry()) != null) {
 			if (entry.isDirectory()) {
@@ -179,7 +179,7 @@ public class Archiver {
 	}
 
 	private void writeEntryToFile(JarEntry entry, JarInputStream jis, File outputFolder)
-			throws IOException {
+		throws IOException {
 		FileOutputStream fos = null;
 		File file = new File(outputFolder, entry.getName());
 		try {
@@ -206,7 +206,7 @@ public class Archiver {
 	}
 
 	public static void main(String[] args)
-			throws IOException {
+		throws IOException {
 		Archiver archiver = new Archiver();
 		File targetFile = new File(args[0]);
 		File[] sources = new File[args.length - 1];

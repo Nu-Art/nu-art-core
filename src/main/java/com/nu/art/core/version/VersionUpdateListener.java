@@ -21,7 +21,7 @@ package com.nu.art.core.version;
 import java.io.Serializable;
 
 public interface VersionUpdateListener
-		extends Serializable {
+	extends Serializable {
 
 	public void updateVersion(Version version);
 }

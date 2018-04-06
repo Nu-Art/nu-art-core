@@ -21,7 +21,7 @@ package com.nu.art.core.exceptions.runtime;
 import com.nu.art.core.exceptions.RuntimeInternalException;
 
 public final class BadImplementationException
-		extends RuntimeInternalException {
+	extends RuntimeInternalException {
 
 	private static final long serialVersionUID = -6066294931673893724L;
 

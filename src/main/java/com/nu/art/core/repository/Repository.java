@@ -21,7 +21,7 @@ package com.nu.art.core.repository;
 import java.util.HashMap;
 
 public final class Repository
-		implements RepositoryDelegator {
+	implements RepositoryDelegator {
 
 	private final HashMap<RepositoryKey<?>, Object> map = new HashMap<>();
 

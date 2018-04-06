@@ -43,7 +43,7 @@ public class StreamTools {
 	 * @throws IOException
 	 */
 	public static void copy(InputStream inputStream, long inputStreamSize, OutputStream outputStream, ProgressNotifier progressNotifier)
-			throws IOException {
+		throws IOException {
 		byte[] buffer = new byte[1024];
 		int length;
 		int readSize = 0;
@@ -77,13 +77,13 @@ public class StreamTools {
 	 * @throws IOException
 	 */
 	public static byte[] readFully(InputStream inputStream)
-			throws IOException {
+		throws IOException {
 		ByteArrayOutputStream bos = readStreamFully(inputStream);
 		return bos.toByteArray();
 	}
 
 	private static ByteArrayOutputStream readStreamFully(InputStream inputStream)
-			throws IOException {
+		throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		copy(inputStream, bos);
 		inputStream.close();
@@ -100,12 +100,12 @@ public class StreamTools {
 	 * @throws IOException
 	 */
 	public static String readFullyAsString(InputStream inputStream)
-			throws IOException {
+		throws IOException {
 		return readFullyAsString(inputStream, "utf-8");
 	}
 
 	public static String readFullyAsString(InputStream inputStream, String charset)
-			throws IOException {
+		throws IOException {
 		ByteArrayOutputStream bos = readStreamFully(inputStream);
 		return bos.toString(charset);
 	}
@@ -177,7 +177,7 @@ public class StreamTools {
 	}
 
 	public static void copy(File origin, OutputStream outputStream)
-			throws IOException {
+		throws IOException {
 		if (!origin.exists())
 			throw new IOException("Could find origin file: " + origin.getAbsolutePath());
 
@@ -196,7 +196,7 @@ public class StreamTools {
 
 	//	add a progress listener
 	public static void copy(InputStream inputStream, File target)
-			throws IOException {
+		throws IOException {
 		if (target.exists()) {
 			if (target.isDirectory())
 				throw new IOException("Cannot copy stream into directory: " + target.getAbsolutePath());
@@ -218,12 +218,12 @@ public class StreamTools {
 	}
 
 	public static void copy(InputStream inputStream, OutputStream outputStream)
-			throws IOException {
+		throws IOException {
 		copy(inputStream, outputStream, false);
 	}
 
 	public static void copy(InputStream inputStream, OutputStream outputStream, boolean flush)
-			throws IOException {
+		throws IOException {
 		byte[] buffer = new byte[1024];
 		int length = 0;
 		int i = 0;

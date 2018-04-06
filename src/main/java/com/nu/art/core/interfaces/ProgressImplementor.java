@@ -19,7 +19,7 @@
 package com.nu.art.core.interfaces;
 
 public abstract class ProgressImplementor
-		implements ProgressNotifier {
+	implements ProgressNotifier {
 
 	@Override
 	public void onCopyEnded() {}

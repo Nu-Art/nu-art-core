@@ -21,7 +21,7 @@ package com.nu.art.core.tools;
 public interface Converter {
 
 	Object convert(String value)
-			throws Exception;
+		throws Exception;
 
 	public static final Converter StringConverter = new Converter() {
 

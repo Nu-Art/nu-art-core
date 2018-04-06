@@ -24,7 +24,7 @@ import java.lang.reflect.Field;
 import java.util.Vector;
 
 public final class MultiExceptions
-		extends InternalException {
+	extends InternalException {
 
 	private static final long serialVersionUID = 4868165699725328140L;
 
@@ -139,7 +139,7 @@ public final class MultiExceptions
 	 * @throws MultiExceptions If there are any exception in this exception container.
 	 */
 	public void process()
-			throws MultiExceptions {
+		throws MultiExceptions {
 		if (exceptions.size() > 0) {
 			throw this;
 		}

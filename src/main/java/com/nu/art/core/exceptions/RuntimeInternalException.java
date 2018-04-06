@@ -19,7 +19,7 @@
 package com.nu.art.core.exceptions;
 
 public class RuntimeInternalException
-		extends RuntimeException {
+	extends RuntimeException {
 
 	private static final long serialVersionUID = 3912913779525068164L;
 

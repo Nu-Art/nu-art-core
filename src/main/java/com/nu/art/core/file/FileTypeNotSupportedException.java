@@ -21,7 +21,7 @@ package com.nu.art.core.file;
 import com.nu.art.core.exceptions.InternalException;
 
 public final class FileTypeNotSupportedException
-		extends InternalException {
+	extends InternalException {
 
 	private static final long serialVersionUID = 3279874927327267217L;
 

@@ -19,7 +19,7 @@
 package com.nu.art.core.version;
 
 public class BadVersionFormat
-		extends com.nu.art.core.exceptions.InternalException {
+	extends com.nu.art.core.exceptions.InternalException {
 
 	private static final long serialVersionUID = -6992302174521498388L;
 

@@ -24,7 +24,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
 public final class Stream
-		extends DataOutputStream {
+	extends DataOutputStream {
 
 	public Stream() {
 		super(new ByteArrayOutputStream());

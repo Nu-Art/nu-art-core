@@ -27,7 +27,7 @@ import com.nu.art.core.exceptions.RuntimeInternalException;
  * Very useful, very informative... Don't forget to remove it in production!!
  */
 public class WhoCalledThis
-		extends RuntimeInternalException {
+	extends RuntimeInternalException {
 
 	private static final long serialVersionUID = 4984581328961158655L;
 

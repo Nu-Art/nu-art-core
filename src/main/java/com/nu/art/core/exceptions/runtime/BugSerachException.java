@@ -21,7 +21,7 @@ package com.nu.art.core.exceptions.runtime;
 import com.nu.art.core.exceptions.InternalException;
 
 public class BugSerachException
-		extends InternalException {
+	extends InternalException {
 
 	private static final long serialVersionUID = 1990676606407483860L;
 

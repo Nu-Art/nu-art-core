@@ -25,7 +25,7 @@ import com.nu.art.core.interfaces.ILogger;
  */
 
 public class LoggerDelegator
-		implements ILogger {
+	implements ILogger {
 
 	ILogger logger;
 

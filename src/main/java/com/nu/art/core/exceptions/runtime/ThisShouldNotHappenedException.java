@@ -19,7 +19,7 @@
 package com.nu.art.core.exceptions.runtime;
 
 public final class ThisShouldNotHappenedException
-		extends com.nu.art.core.exceptions.RuntimeInternalException {
+	extends com.nu.art.core.exceptions.RuntimeInternalException {
 
 	private static final long serialVersionUID = 4984581328961158655L;
 

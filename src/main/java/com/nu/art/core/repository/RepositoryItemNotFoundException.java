@@ -21,7 +21,7 @@ package com.nu.art.core.repository;
 import com.nu.art.core.exceptions.RuntimeInternalException;
 
 public final class RepositoryItemNotFoundException
-		extends RuntimeInternalException {
+	extends RuntimeInternalException {
 
 	private static final long serialVersionUID = -2340388739990911917L;
 

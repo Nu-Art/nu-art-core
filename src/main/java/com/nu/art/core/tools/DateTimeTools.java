@@ -41,7 +41,7 @@ public class DateTimeTools {
 	public static final long Year = Month * 12;
 
 	public static final Date getDateFromString(SimpleDateFormat dateFormat, String date)
-			throws ParseException {
+		throws ParseException {
 		return dateFormat.parse(date);
 	}
 

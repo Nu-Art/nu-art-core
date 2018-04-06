@@ -25,7 +25,7 @@ package com.nu.art.core.utils;
  */
 @SuppressWarnings("unused")
 public class RunnableQueue
-		extends PoolQueue<Runnable> {
+	extends PoolQueue<Runnable> {
 
 	@Override
 	protected void onExecutionError(Runnable item, Throwable e) {
@@ -33,7 +33,7 @@ public class RunnableQueue
 	}
 
 	protected void executeAction(Runnable runnable)
-			throws Exception {
+		throws Exception {
 		runnable.run();
 	}
 }

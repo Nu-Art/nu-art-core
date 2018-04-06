@@ -35,7 +35,7 @@ import java.util.zip.ZipOutputStream;
 public class FileTools {
 
 	public static void createNewFile(File file)
-			throws IOException {
+		throws IOException {
 		if (file.exists()) {
 			return;
 		}
@@ -56,7 +56,7 @@ public class FileTools {
 	}
 
 	private static void copyDirTo(File sourceFolder, File destinationFolder)
-			throws IOException {
+		throws IOException {
 
 		File[] files = sourceFolder.listFiles();
 		if (files == null) {
@@ -79,7 +79,7 @@ public class FileTools {
 	}
 
 	public static void copyFile(File source, File destinationFolder)
-			throws IOException {
+		throws IOException {
 		if (!destinationFolder.isDirectory()) {
 			throw new IOException("Destination MUST be a folder");
 		}
@@ -96,12 +96,12 @@ public class FileTools {
 	}
 
 	public static void copyFile(String source, String destinationFolder)
-			throws IOException {
+		throws IOException {
 		FileTools.copyFile(new File(source), new File(destinationFolder));
 	}
 
 	public static void copyFiles(File[] source, File destinationFolder)
-			throws IOException {
+		throws IOException {
 		if (!destinationFolder.isDirectory()) {
 			throw new IOException("Destination MUST be a folder");
 		}
@@ -111,13 +111,13 @@ public class FileTools {
 	}
 
 	public static void move(File origin, File target)
-			throws IOException {
+		throws IOException {
 		if (!origin.renameTo(target))
 			throw new IOException("Error moving file: " + origin.getAbsolutePath() + " -> " + target.getAbsolutePath());
 	}
 
 	private static void copyFileTo(File source, File destinationFolder)
-			throws IOException {
+		throws IOException {
 		File newFile = new File(destinationFolder, source.getName());
 		createNewFile(newFile);
 
@@ -145,7 +145,7 @@ public class FileTools {
 	}
 
 	public static void delete(File toDelete)
-			throws IOException {
+		throws IOException {
 		if (!toDelete.exists())
 			return;
 
@@ -157,7 +157,7 @@ public class FileTools {
 	}
 
 	private static void deleteDirectory(File toDelete)
-			throws IOException {
+		throws IOException {
 		String runningDir = getRunningDirectoryPath();
 		if (runningDir.length() > 2 && toDelete.getAbsolutePath().contains(runningDir)) {
 			throw new IllegalStateException("MAJOR ERROR!!! Cannot delete running folder!!!");
@@ -175,7 +175,7 @@ public class FileTools {
 	}
 
 	private static void deleteFile(File toDelete)
-			throws IOException {
+		throws IOException {
 		if (!toDelete.delete()) {
 			throw new IOException("Failed to delete file: " + toDelete.getAbsolutePath());
 		}
@@ -198,7 +198,7 @@ public class FileTools {
 	}
 
 	public static void mkDir(File destination)
-			throws IOException {
+		throws IOException {
 		Vector<File> toMake = new Vector<>();
 		while (destination != null && !destination.exists()) {
 			toMake.insertElementAt(destination, 0);
@@ -212,12 +212,12 @@ public class FileTools {
 	}
 
 	public static byte[] readFully(String pathToFile)
-			throws IOException {
+		throws IOException {
 		return readFully(new File(pathToFile));
 	}
 
 	public static byte[] readFully(File file)
-			throws IOException {
+		throws IOException {
 		FileInputStream inputStream = null;
 		try {
 			inputStream = new FileInputStream(file);
@@ -229,7 +229,7 @@ public class FileTools {
 	}
 
 	public static String readFullyAsString(File file)
-			throws IOException {
+		throws IOException {
 		FileInputStream inputStream = null;
 		try {
 			inputStream = new FileInputStream(file);
@@ -313,7 +313,7 @@ public class FileTools {
 	}
 
 	public static void writeToFile(String text, File file, Charsets encoding)
-			throws IOException {
+		throws IOException {
 		FileOutputStream fos = null;
 		BufferedWriter out = null;
 		try {
@@ -357,7 +357,7 @@ public class FileTools {
 	}
 
 	public static void archive(File output, File... filesToZip)
-			throws IOException {
+		throws IOException {
 		byte[] buffer = new byte[1024];
 
 		FileOutputStream fos = null;
@@ -399,7 +399,7 @@ public class FileTools {
 	}
 
 	public static void renameFile(File origin, File target)
-			throws IOException {
+		throws IOException {
 		if (!origin.renameTo(target))
 			throw new IOException("Unable to rename file from: " + origin.getName() + " => " + target.getName());
 	}

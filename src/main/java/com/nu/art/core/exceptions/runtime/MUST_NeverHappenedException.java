@@ -21,7 +21,7 @@ package com.nu.art.core.exceptions.runtime;
 import com.nu.art.core.exceptions.RuntimeInternalException;
 
 public class MUST_NeverHappenedException
-		extends RuntimeInternalException {
+	extends RuntimeInternalException {
 
 	private static final long serialVersionUID = 4984581328961158655L;
 

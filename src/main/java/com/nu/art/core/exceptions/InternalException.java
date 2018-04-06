@@ -21,7 +21,7 @@ package com.nu.art.core.exceptions;
 import java.util.Vector;
 
 public class InternalException
-		extends Exception {
+	extends Exception {
 
 	private static final long serialVersionUID = -7107592057924006287L;
 

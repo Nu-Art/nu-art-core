@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.Vector;
 
 public class FileTypeCollection
-		implements Serializable {
+	implements Serializable {
 
 	private static final long serialVersionUID = 2101543520036915189L;
 

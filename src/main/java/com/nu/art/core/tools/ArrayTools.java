@@ -30,9 +30,9 @@ import java.util.List;
 import java.util.Set;
 
 @SuppressWarnings( {
-											 "unused",
-											 "unchecked"
-									 })
+	                   "unused",
+	                   "unchecked"
+                   })
 public class ArrayTools {
 
 	public static String join(String delimiter, Object... elements) {

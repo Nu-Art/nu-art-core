@@ -19,4 +19,4 @@
 package com.nu.art.core.interfaces;
 
 public interface Obfuscation_Keep
-		extends Obfuscation_KeepFields, Obfuscation_KeepMethods {}
+	extends Obfuscation_KeepFields, Obfuscation_KeepMethods {}

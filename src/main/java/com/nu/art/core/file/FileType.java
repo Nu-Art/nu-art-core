@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 public class FileType
-		implements Serializable {
+	implements Serializable {
 
 	private static final long serialVersionUID = -32181400402056153L;
 
@@ -91,7 +91,7 @@ public class FileType
 	private static HashMap<String, FileType> suffixMap;
 
 	public static final FileType getFileType(File file)
-			throws FileTypeNotSupportedException {
+		throws FileTypeNotSupportedException {
 		String name = file.getName();
 		int from = name.lastIndexOf('.');
 		String suffix = name.substring(from + 1);
@@ -104,7 +104,7 @@ public class FileType
 	}
 
 	public static final FileType getFileTypeFromSuffix(String suffix)
-			throws FileTypeNotSupportedException {
+		throws FileTypeNotSupportedException {
 		suffix = suffix.toLowerCase();
 		FileType fileType = suffixMap.get(suffix);
 		if (fileType == null) {
@@ -176,7 +176,7 @@ public class FileType
 	}
 
 	public void validateFileName(String newFileName)
-			throws IOException {
+		throws IOException {
 		File file = new File(newFileName);
 		if (file.exists()) {
 			throw new IOException("File already exists!!");
