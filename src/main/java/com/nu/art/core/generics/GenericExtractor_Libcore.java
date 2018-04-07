@@ -33,8 +33,9 @@ public class GenericExtractor_Libcore
 
 	private Field resolvedTypesField;
 
-	public GenericExtractor_Libcore(Class<?> parametrizedType)
+	public GenericExtractor_Libcore()
 		throws NoSuchFieldException, ClassNotFoundException {
+		Class<?> parametrizedType = Class.forName("libcore.reflect.ParameterizedTypeImpl");
 		argsField = parametrizedType.getDeclaredField("args");
 		argsField.setAccessible(true);
 

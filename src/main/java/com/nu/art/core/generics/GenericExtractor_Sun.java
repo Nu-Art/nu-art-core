@@ -32,8 +32,9 @@ public class GenericExtractor_Sun
 	private final Field actualTypeField;
 	private final Field rawField;
 
-	GenericExtractor_Sun(Class<?> parametrizedType)
+	GenericExtractor_Sun()
 		throws NoSuchFieldException, ClassNotFoundException {
+		Class<?> parametrizedType = Class.forName("sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl");
 
 		actualTypeField = parametrizedType.getDeclaredField("actualTypeArguments");
 		actualTypeField.setAccessible(true);

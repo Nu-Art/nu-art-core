@@ -33,8 +33,10 @@ public class GenericExtractor_Apache
 
 	private Field resolvedTypesField;
 
-	public GenericExtractor_Apache(Class<?> parametrizedType)
+	public GenericExtractor_Apache()
 		throws NoSuchFieldException, ClassNotFoundException {
+		Class<?> parametrizedType = Class.forName("org.apache.harmony.luni.lang.reflect.ImplForType");
+
 		argsField = parametrizedType.getDeclaredField("args");
 		argsField.setAccessible(true);
 

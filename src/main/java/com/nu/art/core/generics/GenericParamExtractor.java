@@ -24,29 +24,28 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.HashMap;
 
+@SuppressWarnings("unchecked")
 public class GenericParamExtractor {
+
+	private static final Class<? extends IGenericParamExtractor>[] extractorTypes = new Class[]{
+		GenericExtractor_Libcore.class,
+		GenericExtractor_Sun.class,
+		GenericExtractor_Apache.class
+	};
 
 	public static final GenericParamExtractor _GenericParamExtractor = new GenericParamExtractor();
 
-	IGenericParamExtractor extractor;
+	private IGenericParamExtractor extractor;
 
 	private GenericParamExtractor() {
-		try {
-			extractor = new GenericExtractor_Libcore(Class.forName("libcore.reflect.ParameterizedTypeImpl"));
-			return;
-		} catch (Throwable ignore) {}
+		for (Class<? extends IGenericParamExtractor> extractorType : extractorTypes) {
+			try {
+				extractor = extractorType.newInstance();
+			} catch (Throwable ignore) {}
+		}
 
-		try {
-			extractor = new GenericExtractor_Sun(Class.forName("sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl"));
-			return;
-		} catch (Throwable ignore) {}
-
-		try {
-			extractor = new GenericExtractor_Apache(Class.forName("org.apache.harmony.luni.lang.reflect.ImplForType"));
-			return;
-		} catch (Throwable ignore) {}
-
-		throw new MUST_NeverHappenedException("Error extracting processor generic parameter fields for runtime use");
+		if (extractor == null)
+			throw new MUST_NeverHappenedException("Error extracting processor generic parameter fields for runtime use");
 	}
 
 	@SuppressWarnings("unchecked")
