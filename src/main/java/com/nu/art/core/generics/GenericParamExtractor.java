@@ -19,6 +19,8 @@
 package com.nu.art.core.generics;
 
 import com.nu.art.core.exceptions.runtime.MUST_NeverHappenedException;
+import com.nu.art.core.interfaces.Getter;
+import com.nu.art.core.utils.SynchronizedObject;
 
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -37,6 +39,13 @@ public class GenericParamExtractor {
 
 	private IGenericParamExtractor extractor;
 
+	private SynchronizedObject<HashMap<String, Type>> params = new SynchronizedObject<>(new Getter<HashMap<String, Type>>() {
+		@Override
+		public HashMap<String, Type> get() {
+			return new HashMap<>();
+		}
+	});
+
 	private GenericParamExtractor() {
 		for (Class<? extends IGenericParamExtractor> extractorType : extractorTypes) {
 			try {
@@ -52,7 +61,8 @@ public class GenericParamExtractor {
 	public <T, K> Class<K> extractGenericType(Class<T> type, T instance, int index) {
 		try {
 			Class<?> aClass = instance.getClass();
-			HashMap<String, Type> genericParamsTypes = new HashMap<>();
+			HashMap<String, Type> genericParamsTypes = params.get();
+
 			do {
 				TypeVariable<? extends Class<?>>[] superTypes = aClass.getSuperclass().getTypeParameters();
 				Type genericSuperclass = aClass.getGenericSuperclass();
