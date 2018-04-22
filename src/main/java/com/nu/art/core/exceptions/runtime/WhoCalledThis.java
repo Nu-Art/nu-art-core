@@ -18,8 +18,6 @@
 
 package com.nu.art.core.exceptions.runtime;
 
-import com.nu.art.core.exceptions.RuntimeInternalException;
-
 /**
  * Sometimes it is useful to just print to the log the stacktrace called a specific  line of code... just create a new Exception and print the stacktrace before
  * that line...
@@ -27,7 +25,7 @@ import com.nu.art.core.exceptions.RuntimeInternalException;
  * Very useful, very informative... Don't forget to remove it in production!!
  */
 public class WhoCalledThis
-	extends RuntimeInternalException {
+	extends RuntimeException {
 
 	private static final long serialVersionUID = 4984581328961158655L;
 

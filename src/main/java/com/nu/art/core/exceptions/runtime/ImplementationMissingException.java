@@ -19,7 +19,7 @@
 package com.nu.art.core.exceptions.runtime;
 
 public final class ImplementationMissingException
-	extends com.nu.art.core.exceptions.RuntimeInternalException {
+	extends RuntimeException {
 
 	private static final long serialVersionUID = 3766153149940385367L;
 

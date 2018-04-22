@@ -16,22 +16,18 @@
  * limitations under the License.
  */
 
-package com.nu.art.core.exceptions;
+package com.nu.art.core.exceptions.runtime;
 
-public class RuntimeInternalException
+public final class ThisShouldNotHappenException
 	extends RuntimeException {
 
-	private static final long serialVersionUID = 3912913779525068164L;
+	private static final long serialVersionUID = 4984581328961158655L;
 
-	public RuntimeInternalException(String reason) {
+	public ThisShouldNotHappenException(String reason) {
 		super(reason);
 	}
 
-	public RuntimeInternalException(String reason, Throwable e) {
+	public ThisShouldNotHappenException(String reason, Throwable e) {
 		super(reason, e);
-	}
-
-	public RuntimeInternalException(Throwable e) {
-		super(e);
 	}
 }

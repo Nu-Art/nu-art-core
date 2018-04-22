@@ -19,7 +19,7 @@
 package com.nu.art.core.exceptions.runtime;
 
 public final class ClassInstantiationRuntimeException
-	extends MUST_NeverHappenedException {
+	extends MUST_NeverHappenException {
 
 	private static final long serialVersionUID = 7557607466508340486L;
 

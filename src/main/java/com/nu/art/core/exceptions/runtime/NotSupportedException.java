@@ -18,10 +18,8 @@
 
 package com.nu.art.core.exceptions.runtime;
 
-import com.nu.art.core.exceptions.RuntimeInternalException;
-
 public final class NotSupportedException
-	extends RuntimeInternalException {
+	extends RuntimeException {
 
 	public NotSupportedException(String reason) {
 		super(reason);
