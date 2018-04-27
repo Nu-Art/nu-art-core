@@ -19,6 +19,7 @@ public class ArchiveWriter {
 
 	private JarOutputStream jos = null;
 	private FileOutputStream fos = null;
+	private File outputFile;
 
 	public ArchiveWriter open(File outputFile)
 		throws IOException {
@@ -29,6 +30,10 @@ public class ArchiveWriter {
 	public ArchiveWriter open(File outputFile, Manifest manifest)
 		throws IOException {
 		try {
+			if (fos != null)
+				throw new IOException("Already have open file: " + outputFile.getAbsolutePath());
+
+			this.outputFile = outputFile;
 			FileTools.createNewFile(outputFile);
 
 			fos = new FileOutputStream(outputFile);

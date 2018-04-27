@@ -30,6 +30,7 @@ public class ArchiveReader {
 	private JarInputStream jis;
 	private InputStream fis;
 	private OverridePolicy overridePolicy = DoNotOverride;
+	private File inputFile;
 	private File outputFolder;
 	private boolean doVerify;
 
@@ -54,19 +55,24 @@ public class ArchiveReader {
 		return this;
 	}
 
-	public ArchiveReader open(String outputFile)
+	public ArchiveReader open(String inputFile)
 		throws IOException {
-		return open(new File(outputFile));
+		return open(new File(inputFile));
 	}
 
-	public ArchiveReader open(File outputFile)
+	public ArchiveReader open(File inputFile)
 		throws IOException {
-		FileTools.createNewFile(outputFile);
-		return open(new FileInputStream(outputFile));
+		FileTools.createNewFile(inputFile);
+		this.inputFile = inputFile;
+
+		return open(new FileInputStream(inputFile));
 	}
 
 	public ArchiveReader open(InputStream inputStream)
 		throws IOException {
+		if (fis != null)
+			throw new IOException(inputFile == null ? "Has open input stream" : "Already have open file: " + inputFile.getAbsolutePath());
+
 		this.fis = inputStream;
 		try {
 			jis = new JarInputStream(fis, doVerify);
