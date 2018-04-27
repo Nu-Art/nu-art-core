@@ -37,7 +37,15 @@ import sun.awt.OSInfo.OSType;
 
 public class FileTools {
 
-	public static final OSType type = OSInfo.getOSType();
+	public static boolean CaseSensitiveOS;
+
+	static {
+		try {
+			CaseSensitiveOS = OSInfo.getOSType() != OSType.MACOSX;
+		} catch (Throwable t) {
+			CaseSensitiveOS = true;
+		}
+	}
 
 	public static void createNewFile(File file)
 		throws IOException {
@@ -180,7 +188,7 @@ public class FileTools {
 	public static boolean isParentOfRunningFolder(File toDelete) {
 		String runningDir = getRunningDirectoryPath();
 		String toDeleteAbsolutePath = toDelete.getAbsolutePath();
-		if (type == OSType.MACOSX) {
+		if (!CaseSensitiveOS) {
 			runningDir = runningDir.toLowerCase();
 			toDeleteAbsolutePath = toDeleteAbsolutePath.toLowerCase();
 		}
