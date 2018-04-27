@@ -32,7 +32,12 @@ import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import sun.awt.OSInfo;
+import sun.awt.OSInfo.OSType;
+
 public class FileTools {
+
+	public static final OSType type = OSInfo.getOSType();
 
 	public static void createNewFile(File file)
 		throws IOException {
@@ -158,10 +163,9 @@ public class FileTools {
 
 	private static void deleteDirectory(File toDelete)
 		throws IOException {
-		String runningDir = getRunningDirectoryPath();
-		if (runningDir.length() > 2 && toDelete.getAbsolutePath().contains(runningDir)) {
+		if (isParentOfRunningFolder(toDelete))
 			throw new IllegalStateException("MAJOR ERROR!!! Cannot delete running folder!!!");
-		}
+
 		File[] files = toDelete.listFiles();
 
 		if (files != null)
@@ -169,9 +173,19 @@ public class FileTools {
 				delete(file);
 			}
 
-		if (!toDelete.delete()) {
+		if (!toDelete.delete())
 			throw new IOException("Failed to delete directory: " + toDelete.getAbsolutePath());
+	}
+
+	public static boolean isParentOfRunningFolder(File toDelete) {
+		String runningDir = getRunningDirectoryPath();
+		String toDeleteAbsolutePath = toDelete.getAbsolutePath();
+		if (type == OSType.MACOSX) {
+			runningDir = runningDir.toLowerCase();
+			toDeleteAbsolutePath = toDeleteAbsolutePath.toLowerCase();
 		}
+
+		return runningDir.length() > 2 && runningDir.startsWith(toDeleteAbsolutePath);
 	}
 
 	private static void deleteFile(File toDelete)
@@ -316,9 +330,10 @@ public class FileTools {
 		throws IOException {
 		FileOutputStream fos = null;
 		BufferedWriter out = null;
+		createNewFile(file);
 		try {
 			fos = new FileOutputStream(file);
-			out = new BufferedWriter(new OutputStreamWriter(fos, encoding.toString()));
+			out = new BufferedWriter(new OutputStreamWriter(fos, encoding.encoding));
 			out.write(text);
 			out.flush();
 		} finally {
