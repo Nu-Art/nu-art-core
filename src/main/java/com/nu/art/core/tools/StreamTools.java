@@ -18,7 +18,9 @@
 
 package com.nu.art.core.tools;
 
+import com.nu.art.core.interfaces.Getter;
 import com.nu.art.core.interfaces.ProgressNotifier;
+import com.nu.art.core.utils.SynchronizedObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -28,9 +30,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+@SuppressWarnings("WeakerAccess")
 public class StreamTools {
 
-	private static final int CopyBufferSize = 1024;
+	public static int CopyBufferSize = 1024;
+	private static final SynchronizedObject<byte[]> buffers = new SynchronizedObject<>(new Getter<byte[]>() {
+		@Override
+		public byte[] get() {
+			return new byte[CopyBufferSize];
+		}
+	});
 
 	/**
 	 * Copies one stream into the other =&gt; Copy <b>inputStream</b> to <b>outputStream</b>
@@ -44,7 +53,7 @@ public class StreamTools {
 	 */
 	public static void copy(InputStream inputStream, long inputStreamSize, OutputStream outputStream, ProgressNotifier progressNotifier)
 		throws IOException {
-		byte[] buffer = new byte[1024];
+		byte[] buffer = buffers.get();
 		int length;
 		int readSize = 0;
 		try {
@@ -224,15 +233,16 @@ public class StreamTools {
 
 	public static void copy(InputStream inputStream, OutputStream outputStream, boolean flush)
 		throws IOException {
-		byte[] buffer = new byte[1024];
-		int length = 0;
+		byte[] buffer = buffers.get();
+		int length;
 		int i = 0;
-		while ((length = inputStream.read(buffer)) != -1) {
+		while ((length = inputStream.read(buffer)) > 0) {
 			outputStream.write(buffer, 0, length);
 			if (flush && i % 10 == 0)
 				outputStream.flush();
 
 			i++;
 		}
+		outputStream.flush();
 	}
 }

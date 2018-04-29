@@ -8,20 +8,20 @@ import java.util.HashMap;
  * Created by tacb0ss on 08/04/2018.
  */
 
-public class SynchronizedObject<Type>
-	extends HashMap<Thread, Type> {
+public class SynchronizedObject<Type> {
 
+	private final HashMap<Thread, Type> instanceMap = new HashMap<>();
 	private final Getter<Type> getter;
 
 	public SynchronizedObject(Getter<Type> getter) {
 		this.getter = getter;
 	}
 
-	public Type get() {
+	public final Type get() {
 		Thread thread = Thread.currentThread();
-		Type object = super.get(thread);
+		Type object = instanceMap.get(thread);
 		if (object == null)
-			super.put(thread, object = getter.get());
+			instanceMap.put(thread, object = getter.get());
 
 		return object;
 	}

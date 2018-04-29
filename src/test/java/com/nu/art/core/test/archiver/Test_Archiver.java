@@ -31,6 +31,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 
+import static com.nu.art.core.archiver.ArchiveReader.OverridePolicy.ForceDelete;
 import static com.nu.art.core.tools.FileTools.getRunningDirectoryPath;
 import static com.nu.art.core.tools.FileTools.isParentOfRunningFolder;
 
@@ -76,7 +77,7 @@ public class Test_Archiver {
 		File outputFile = new File(path + "/output", testName + ".zip");
 
 		new ArchiveWriter().open(outputFile).addFile("here", testFiles[0]).close();
-		new ArchiveReader().open(outputFile).setOutputFolder(path + "/extracted/" + testName).extract();
+		new ArchiveReader().open(outputFile).setOutputFolder(path + "/extracted/" + testName).overridePolicy(ForceDelete).extract();
 	}
 
 	@Test
@@ -106,7 +107,7 @@ public class Test_Archiver {
 		File outputFile = new File(path + "/output", testName + ".zip");
 
 		new ArchiveWriter().open(outputFile).addFiles("here", testFiles[0], testFiles[2]).addFiles("here1", testFiles[1], testFiles[3]).close();
-		new ArchiveReader().open(outputFile).setOutputFolder(path + "/extracted/" + testName).overridePolicy(OverridePolicy.ForceDelete).extract();
+		new ArchiveReader().open(outputFile).setOutputFolder(path + "/extracted/" + testName).overridePolicy(ForceDelete).extract();
 		new ArchiveReader().open(outputFile).setOutputFolder(path + "/extracted/" + testName).overridePolicy(OverridePolicy.Merge).extract();
 	}
 

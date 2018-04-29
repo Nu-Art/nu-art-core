@@ -7,9 +7,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.jar.JarEntry;
-import java.util.jar.JarOutputStream;
-import java.util.jar.Manifest;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Created by tacb0ss on 26/04/2018.
@@ -17,17 +16,11 @@ import java.util.jar.Manifest;
 
 public class ArchiveWriter {
 
-	private JarOutputStream jos = null;
+	private ZipOutputStream jos = null;
 	private FileOutputStream fos = null;
 	private File outputFile;
 
 	public ArchiveWriter open(File outputFile)
-		throws IOException {
-		open(outputFile, null);
-		return this;
-	}
-
-	public ArchiveWriter open(File outputFile, Manifest manifest)
 		throws IOException {
 		try {
 			if (fos != null)
@@ -37,11 +30,7 @@ public class ArchiveWriter {
 			FileTools.createNewFile(outputFile);
 
 			fos = new FileOutputStream(outputFile);
-			if (manifest == null) {
-				jos = new JarOutputStream(fos);
-			} else {
-				jos = new JarOutputStream(fos, manifest);
-			}
+			jos = new ZipOutputStream(fos);
 		} catch (IOException e) {
 			dispose();
 			throw e;
@@ -115,7 +104,7 @@ public class ArchiveWriter {
 		FileInputStream fis = null;
 		try {
 			fis = new FileInputStream(file);
-			JarEntry jarEntry = new JarEntry(fullEntryPath);
+			ZipEntry jarEntry = new ZipEntry(fullEntryPath);
 			jarEntry.setTime(file.lastModified());
 			jarEntry.setSize(file.length());
 			jos.putNextEntry(jarEntry);

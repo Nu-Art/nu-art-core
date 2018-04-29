@@ -8,9 +8,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
-import java.util.jar.Manifest;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import static com.nu.art.core.archiver.ArchiveReader.OverridePolicy.DoNotOverride;
 import static com.nu.art.core.archiver.ArchiveReader.OverridePolicy.ForceDelete;
@@ -27,7 +27,7 @@ public class ArchiveReader {
 		Merge
 	}
 
-	private JarInputStream jis;
+	private ZipInputStream jis;
 	private InputStream fis;
 	private OverridePolicy overridePolicy = DoNotOverride;
 	private File inputFile;
@@ -83,15 +83,6 @@ public class ArchiveReader {
 		return this;
 	}
 
-	public final Manifest getManifest()
-		throws IOException {
-		try {
-			return jis.getManifest();
-		} catch (Exception e) {
-			throw new IOException(e);
-		}
-	}
-
 	public final void extract()
 		throws IOException {
 		try {
@@ -116,8 +107,8 @@ public class ArchiveReader {
 
 	private void readFilesFromArchive()
 		throws IOException {
-		JarEntry entry;
-		while ((entry = jis.getNextJarEntry()) != null) {
+		ZipEntry entry;
+		while ((entry = jis.getNextEntry()) != null) {
 			if (entry.isDirectory()) {
 				continue;
 			}
@@ -125,7 +116,7 @@ public class ArchiveReader {
 		}
 	}
 
-	private void writeEntryToFile(JarEntry entry)
+	private void writeEntryToFile(ZipEntry entry)
 		throws IOException {
 		FileOutputStream fos = null;
 		File file = new File(outputFolder, entry.getName());
