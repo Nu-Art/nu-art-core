@@ -18,10 +18,8 @@
 
 package com.nu.art.core.exceptions.runtime;
 
-import com.nu.art.core.exceptions.RuntimeInternalException;
-
 public class NotImplementedYetException
-	extends RuntimeInternalException {
+	extends RuntimeException {
 
 	private static final long serialVersionUID = -8591885572468981894L;
 

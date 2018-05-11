@@ -18,16 +18,16 @@
 
 package com.nu.art.core.exceptions.runtime;
 
-public final class ThisShouldNotHappenedException
-	extends com.nu.art.core.exceptions.RuntimeInternalException {
+public class MUST_NeverHappenException
+	extends RuntimeException {
 
 	private static final long serialVersionUID = 4984581328961158655L;
 
-	public ThisShouldNotHappenedException(String reason) {
+	public MUST_NeverHappenException(String reason) {
 		super(reason);
 	}
 
-	public ThisShouldNotHappenedException(String reason, Throwable e) {
+	public MUST_NeverHappenException(String reason, Throwable e) {
 		super(reason, e);
 	}
 }

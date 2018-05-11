@@ -18,7 +18,7 @@
 
 package com.nu.art.core.generics;
 
-import com.nu.art.core.exceptions.runtime.MUST_NeverHappenedException;
+import com.nu.art.core.exceptions.runtime.MUST_NeverHappenException;
 import com.nu.art.core.interfaces.Getter;
 import com.nu.art.core.utils.SynchronizedObject;
 
@@ -54,7 +54,7 @@ public class GenericParamExtractor {
 		}
 
 		if (extractor == null)
-			throw new MUST_NeverHappenedException("Error extracting processor generic parameter fields for runtime use");
+			throw new MUST_NeverHappenException("Error extracting processor generic parameter fields for runtime use");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -101,7 +101,7 @@ public class GenericParamExtractor {
 
 			return (Class<K>) genericParamsTypes.get(type.getTypeParameters()[index].getName());
 		} catch (Throwable e) {
-			throw new MUST_NeverHappenedException("Error extracting processor generic parameter from processor type: " + instance.getClass(), e);
+			throw new MUST_NeverHappenException("Error extracting processor generic parameter from processor type: " + instance.getClass(), e);
 		}
 	}
 }
