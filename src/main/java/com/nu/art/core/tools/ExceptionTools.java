@@ -18,6 +18,9 @@
 
 package com.nu.art.core.tools;
 
+import com.nu.art.core.interfaces.Getter;
+import com.nu.art.core.utils.SynchronizedObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.PrintStream;
@@ -28,23 +31,29 @@ public final class ExceptionTools {
 
 	private ExceptionTools() {}
 
+	private static final SynchronizedObject<StringBuilder> stringBuilders = new SynchronizedObject<>(new Getter<StringBuilder>() {
+		@Override
+		public StringBuilder get() {
+			return new StringBuilder();
+		}
+	});
 	private final static ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
 	private final static DataOutputStream dos = new DataOutputStream(bos);
 
-	public static final String getStackTrace(Throwable e) {
+	public static String getStackTrace(Throwable e) {
 		e.printStackTrace(new PrintStream(dos));
 		String stackTrace = new String(bos.toByteArray());
 		bos.reset();
 		return stackTrace;
 	}
 
-	public static final Throwable getCause(Throwable e) {
+	public static Throwable getCause(Throwable e) {
 		while (e.getCause() != null) { e = e.getCause(); }
 		return e;
 	}
 
-	public static final StackTraceElement[] getLastStackTrace(Throwable e, int count) {
+	public static StackTraceElement[] getLastStackTrace(Throwable e, int count) {
 		Throwable cause = ExceptionTools.getCause(e);
 		ArrayList<StackTraceElement> trace = new ArrayList<>();
 		StackTraceElement[] causeStackTrace = cause.getStackTrace();
@@ -55,8 +64,18 @@ public final class ExceptionTools {
 		return trace.toArray(new StackTraceElement[trace.size()]);
 	}
 
-	public static final String parseStackTrace(StackTraceElement[] stackTrace) {
-		StringBuilder builder = new StringBuilder();
+	public static String parseStackTrace(StackTraceElement stackTraceElement) {
+		StringBuilder builder = stringBuilders.get();
+		builder.setLength(0);
+
+		builder.append(stackTraceElement.toString()).append("\n");
+		return builder.toString();
+	}
+
+	public static String parseStackTrace(StackTraceElement[] stackTrace) {
+		StringBuilder builder = stringBuilders.get();
+		builder.setLength(0);
+
 		for (StackTraceElement stackTraceElement : stackTrace) {
 			builder.append(stackTraceElement.toString()).append("\n");
 		}
