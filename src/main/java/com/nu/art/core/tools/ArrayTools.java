@@ -297,19 +297,26 @@ public class ArrayTools {
 	public static Object getEmptyBoxedArray(Class<?> primitiveType, int length) {
 		if (primitiveType == long[].class) {
 			return new Long[length];
-		} else if (primitiveType == int[].class) {
+		}
+		if (primitiveType == int[].class) {
 			return new Integer[length];
-		} else if (primitiveType == short[].class) {
+		}
+		if (primitiveType == short[].class) {
 			return new Short[length];
-		} else if (primitiveType == char[].class) {
+		}
+		if (primitiveType == char[].class) {
 			return new Character[length];
-		} else if (primitiveType == byte[].class) {
+		}
+		if (primitiveType == byte[].class) {
 			return new Byte[length];
-		} else if (primitiveType == double[].class) {
+		}
+		if (primitiveType == double[].class) {
 			return new Double[length];
-		} else if (primitiveType == float[].class) {
+		}
+		if (primitiveType == float[].class) {
 			return new Float[length];
-		} else if (primitiveType == boolean[].class) {
+		}
+		if (primitiveType == boolean[].class) {
 			return new Boolean[length];
 		}
 		return Array.newInstance(primitiveType, length);
@@ -334,35 +341,50 @@ public class ArrayTools {
 		}
 		if (arrayType == long[].class) {
 			return new long[length];
-		} else if (arrayType == int[].class) {
+		}
+		if (arrayType == int[].class) {
 			return new int[length];
-		} else if (arrayType == short[].class) {
+		}
+		if (arrayType == short[].class) {
 			return new short[length];
-		} else if (arrayType == char[].class) {
+		}
+		if (arrayType == char[].class) {
 			return new char[length];
-		} else if (arrayType == byte[].class) {
+		}
+		if (arrayType == byte[].class) {
 			return new byte[length];
-		} else if (arrayType == double[].class) {
+		}
+		if (arrayType == double[].class) {
 			return new double[length];
-		} else if (arrayType == float[].class) {
+		}
+		if (arrayType == float[].class) {
 			return new float[length];
-		} else if (arrayType == boolean[].class) {
+		}
+		if (arrayType == boolean[].class) {
 			return new boolean[length];
-		} else if (arrayType == Long[].class) {
+		}
+		if (arrayType == Long[].class) {
 			return new Long[length];
-		} else if (arrayType == Integer[].class) {
+		}
+		if (arrayType == Integer[].class) {
 			return new Integer[length];
-		} else if (arrayType == Short[].class) {
+		}
+		if (arrayType == Short[].class) {
 			return new Short[length];
-		} else if (arrayType == Character[].class) {
+		}
+		if (arrayType == Character[].class) {
 			return new Character[length];
-		} else if (arrayType == Byte[].class) {
+		}
+		if (arrayType == Byte[].class) {
 			return new Byte[length];
-		} else if (arrayType == Double[].class) {
+		}
+		if (arrayType == Double[].class) {
 			return new Double[length];
-		} else if (arrayType == Float[].class) {
+		}
+		if (arrayType == Float[].class) {
 			return new Float[length];
-		} else if (arrayType == Boolean[].class) {
+		}
+		if (arrayType == Boolean[].class) {
 			return new Boolean[length];
 		}
 		return Array.newInstance(arrayType.getComponentType(), length);
@@ -380,65 +402,74 @@ public class ArrayTools {
 	 */
 	public static Object getUnboxedArray(Object array) {
 		if (array instanceof Long[]) {
-
 			Long[] originalArray = (Long[]) array;
 			long[] newArray = new long[originalArray.length];
 			for (int i = 0; i < originalArray.length; i++) {
 				newArray[i] = originalArray[i];
 			}
 			return newArray;
-		} else if (array instanceof Integer[]) {
+		}
+
+		if (array instanceof Integer[]) {
 			Integer[] originalArray = (Integer[]) array;
 			int[] newArray = new int[originalArray.length];
 			for (int i = 0; i < originalArray.length; i++) {
 				newArray[i] = originalArray[i];
 			}
 			return newArray;
-		} else if (array instanceof Short[]) {
+		}
+
+		if (array instanceof Short[]) {
 			Short[] originalArray = (Short[]) array;
 			short[] newArray = new short[originalArray.length];
 			for (int i = 0; i < originalArray.length; i++) {
 				newArray[i] = originalArray[i];
 			}
 			return newArray;
-		} else if (array instanceof Character[]) {
+		}
+
+		if (array instanceof Character[]) {
 			Character[] originalArray = (Character[]) array;
 			char[] newArray = new char[originalArray.length];
 			for (int i = 0; i < originalArray.length; i++) {
 				newArray[i] = originalArray[i];
 			}
 			return newArray;
-		} else if (array instanceof Byte[]) {
+		}
+
+		if (array instanceof Byte[]) {
 			Byte[] originalArray = (Byte[]) array;
 			byte[] newArray = new byte[originalArray.length];
 			for (int i = 0; i < originalArray.length; i++) {
 				newArray[i] = originalArray[i];
 			}
 			return newArray;
-		} else if (array instanceof Double[]) {
+		}
+		if (array instanceof Double[]) {
 			Double[] originalArray = (Double[]) array;
 			double[] newArray = new double[originalArray.length];
 			for (int i = 0; i < originalArray.length; i++) {
 				newArray[i] = originalArray[i];
 			}
 			return newArray;
-		} else if (array instanceof Float[]) {
+		}
+		if (array instanceof Float[]) {
 			Float[] originalArray = (Float[]) array;
 			float[] newArray = new float[originalArray.length];
 			for (int i = 0; i < originalArray.length; i++) {
 				newArray[i] = originalArray[i];
 			}
 			return newArray;
-		} else if (array instanceof Boolean[]) {
+		}
+		if (array instanceof Boolean[]) {
 			Boolean[] originalArray = (Boolean[]) array;
 			boolean[] newArray = new boolean[originalArray.length];
 			for (int i = 0; i < originalArray.length; i++) {
 				newArray[i] = originalArray[i];
 			}
 			return newArray;
-		} else {
-			return array;
 		}
+		return array;
 	}
 
 	public static String printArray(String indentation, int warpLineEvery, int[] indices) {
