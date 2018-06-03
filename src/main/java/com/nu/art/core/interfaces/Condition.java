@@ -20,5 +20,5 @@ package com.nu.art.core.interfaces;
 
 public interface Condition<Type> {
 
-	boolean checkCondition(Type item);
+	boolean checkCondition(Type type);
 }

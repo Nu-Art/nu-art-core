@@ -2,7 +2,9 @@ package com.nu.art.core.utils;
 
 import com.nu.art.core.interfaces.Getter;
 
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 /**
  * Created by tacb0ss on 08/04/2018.
@@ -10,7 +12,7 @@ import java.util.HashMap;
 
 public class SynchronizedObject<Type> {
 
-	private final HashMap<Thread, Type> instanceMap = new HashMap<>();
+	private final WeakHashMap<Thread, Type> instanceMap = new WeakHashMap<>();
 	private final Getter<Type> getter;
 
 	public SynchronizedObject(Getter<Type> getter) {
@@ -25,4 +27,10 @@ public class SynchronizedObject<Type> {
 
 		return object;
 	}
+
+	public final Set<Thread> getKeySet() {
+		return instanceMap.keySet();
+	}
+
+	public final Collection<Type> values() {return instanceMap.values();}
 }

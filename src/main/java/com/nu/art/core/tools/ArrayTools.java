@@ -27,13 +27,19 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 @SuppressWarnings( {
 	                   "unused",
 	                   "unchecked"
                    })
 public class ArrayTools {
+
+	private static final Condition DefaultFilter = new Condition() {
+		@Override
+		public boolean checkCondition(Object item) {
+			return true;
+		}
+	};
 
 	public static String join(String delimiter, Object... elements) {
 		if (elements == null)
@@ -125,13 +131,17 @@ public class ArrayTools {
 		return Arrays.asList(arr).contains(item);
 	}
 
+	public static <Type> Type[] asFilteredArray(Collection<?> list, Class<Type> arrayType) {
+		return asFilteredArray(list, arrayType, (Condition<Type>) DefaultFilter);
+	}
+
 	@SuppressWarnings( {"SynchronizationOnLocalVariableOrMethodParameter"})
-	public static <SuperType> SuperType[] asFilteredArray(List<?> list, Class<SuperType> arrayType) {
-		ArrayList<SuperType> temp = new ArrayList<>();
+	public static <Type> Type[] asFilteredArray(Collection<?> list, Class<Type> arrayType, Condition<Type> filter) {
+		ArrayList<Type> temp = new ArrayList<>();
 		synchronized (list) {
 			for (Object item : list) {
-				if (arrayType.isAssignableFrom(item.getClass()))
-					temp.add((SuperType) item);
+				if (arrayType.isAssignableFrom(item.getClass()) && filter.checkCondition((Type) item))
+					temp.add((Type) item);
 			}
 		}
 		return temp.toArray(newInstance(arrayType, temp.size()));
@@ -153,13 +163,13 @@ public class ArrayTools {
 		return collection.toArray(newInstance(arrayType, collection.size()));
 	}
 
-	public static <ArrayType> ArrayType[] asArray(Set<ArrayType> set, Class<ArrayType> arrayType) {
-		return set.toArray(newInstance(arrayType, set.size()));
-	}
-
-	public static <ArrayType> ArrayType[] asArray(List<ArrayType> list, Class<ArrayType> arrayType) {
-		return list.toArray(newInstance(arrayType, list.size()));
-	}
+	//	public static <ArrayType> ArrayType[] asArray(Set<ArrayType> set, Class<ArrayType> arrayType) {
+	//		return set.toArray(newInstance(arrayType, set.size()));
+	//	}
+	//
+	//	public static <ArrayType> ArrayType[] asArray(List<ArrayType> list, Class<ArrayType> arrayType) {
+	//		return list.toArray(newInstance(arrayType, list.size()));
+	//	}
 
 	public static <ArrayType> ArrayType[] asArrayAnonymous(Iterator<?> keys, Class<ArrayType> arrayType) {
 		return asArray(((Iterator<ArrayType>) keys), arrayType);
