@@ -64,6 +64,10 @@ public class ThreadMonitor {
 		private final Thread thread;
 
 		private volatile Stats longest = new Stats();
+
+		private long executedRunnables;
+		private long totalDuration;
+
 		private volatile long estimated;
 		private volatile long started;
 
@@ -91,6 +95,9 @@ public class ThreadMonitor {
 				longest.estimated = runnableMonitor.estimated;
 				longest.name = runnableMonitor.name;
 			}
+
+			executedRunnables += 1;
+			totalDuration += duration;
 		}
 	}
 
