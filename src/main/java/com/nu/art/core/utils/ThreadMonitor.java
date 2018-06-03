@@ -22,14 +22,20 @@ public class ThreadMonitor {
 	public static class RunnableMonitor
 		implements Runnable {
 
-		private final Runnable runnable;
+		private final String name;
 		private final long estimated;
+		private final Runnable runnable;
 
 		public RunnableMonitor(Runnable runnable) {
-			this(runnable, 5 * Second);
+			this("", 5 * Second, runnable);
 		}
 
-		public RunnableMonitor(Runnable runnable, long estimated) {
+		public RunnableMonitor(String name, Runnable runnable) {
+			this(name, 5 * Second, runnable);
+		}
+
+		public RunnableMonitor(String name, long estimated, Runnable runnable) {
+			this.name = name;
 			this.runnable = runnable;
 			this.estimated = estimated;
 		}
@@ -38,6 +44,7 @@ public class ThreadMonitor {
 		public final void run() {
 			ThreadsMonitor.getThreadMonitor().started(this);
 			runnable.run();
+			ThreadsMonitor.getThreadMonitor().ended(this);
 		}
 	}
 
@@ -45,11 +52,19 @@ public class ThreadMonitor {
 		return monitors.get();
 	}
 
+	public final class Stats {
+
+		public String name;
+		public long duration;
+		public long estimated;
+	}
+
 	public final class Monitor {
 
 		private final Thread thread;
 
-		private volatile RunnableMonitor runnableMonitor;
+		private volatile Stats longest = new Stats();
+		private volatile long estimated;
 		private volatile long started;
 
 		private Monitor() {
@@ -57,7 +72,7 @@ public class ThreadMonitor {
 		}
 
 		private void started(RunnableMonitor runnableMonitor) {
-			this.runnableMonitor = runnableMonitor;
+			estimated = runnableMonitor.estimated;
 			started = System.currentTimeMillis();
 		}
 
@@ -66,7 +81,16 @@ public class ThreadMonitor {
 		}
 
 		private boolean isDelayed() {
-			return runnableMonitor.estimated < System.currentTimeMillis() - started;
+			return estimated < System.currentTimeMillis() - started;
+		}
+
+		private void ended(RunnableMonitor runnableMonitor) {
+			long duration = System.currentTimeMillis() - started;
+			if (duration > longest.duration) {
+				longest.duration = duration;
+				longest.estimated = runnableMonitor.estimated;
+				longest.name = runnableMonitor.name;
+			}
 		}
 	}
 

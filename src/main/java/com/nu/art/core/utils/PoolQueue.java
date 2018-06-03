@@ -45,7 +45,7 @@ public abstract class PoolQueue<Type> {
 				}
 				try {
 					executeAction(item);
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					onExecutionError(item, e);
 				}
 			}
@@ -93,7 +93,7 @@ public abstract class PoolQueue<Type> {
 	protected abstract void onExecutionError(Type item, Throwable e);
 
 	protected abstract void executeAction(Type type)
-		throws Exception;
+		throws Throwable;
 
 	public final void kill() {
 		synchronized (this.itemsQueue) {
