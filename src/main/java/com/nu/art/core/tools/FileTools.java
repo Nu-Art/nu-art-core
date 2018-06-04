@@ -252,10 +252,15 @@ public class FileTools {
 
 	public static String readFullyAsString(File file)
 		throws IOException {
+		return readFullyAsString(file, Charsets.UTF_8);
+	}
+
+	public static String readFullyAsString(File file, Charsets charset)
+		throws IOException {
 		FileInputStream inputStream = null;
 		try {
 			inputStream = new FileInputStream(file);
-			return StreamTools.readFullyAsString(inputStream);
+			return StreamTools.readFullyAsString(inputStream, charset);
 		} finally {
 			if (inputStream != null)
 				inputStream.close();

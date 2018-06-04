@@ -18,6 +18,7 @@
 
 package com.nu.art.core.tools;
 
+import com.nu.art.core.file.Charsets;
 import com.nu.art.core.interfaces.Getter;
 import com.nu.art.core.interfaces.ProgressNotifier;
 import com.nu.art.core.utils.SynchronizedObject;
@@ -111,6 +112,12 @@ public class StreamTools {
 	public static String readFullyAsString(InputStream inputStream)
 		throws IOException {
 		return readFullyAsString(inputStream, "utf-8");
+	}
+
+	public static String readFullyAsString(InputStream inputStream, Charsets charset)
+		throws IOException {
+		ByteArrayOutputStream bos = readStreamFully(inputStream);
+		return bos.toString(charset.encoding);
 	}
 
 	public static String readFullyAsString(InputStream inputStream, String charset)
