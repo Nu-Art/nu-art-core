@@ -48,6 +48,10 @@ public class ThreadMonitor {
 		}
 	}
 
+	public static ThreadMonitor getInstance() {
+		return ThreadsMonitor;
+	}
+
 	private Monitor getThreadMonitor() {
 		return monitors.get();
 	}
@@ -84,7 +88,7 @@ public class ThreadMonitor {
 			return started;
 		}
 
-		private boolean isDelayed() {
+		public final boolean isDelayed() {
 			return estimated < System.currentTimeMillis() - started;
 		}
 
@@ -99,14 +103,30 @@ public class ThreadMonitor {
 			executedRunnables += 1;
 			totalDuration += duration;
 		}
+
+		public Thread getThread() {
+			return thread;
+		}
+
+		public Stats getState() {
+			return longest;
+		}
+
+		public long getExecutedRunnables() {
+			return executedRunnables;
+		}
 	}
 
 	public final Monitor[] monitor() {
-		return ArrayTools.asFilteredArray(this.monitors.values(), Monitor.class, new Condition<Monitor>() {
+		return monitor(new Condition<Monitor>() {
 			@Override
 			public boolean checkCondition(Monitor monitor) {
 				return monitor.isDelayed();
 			}
 		});
+	}
+
+	public final Monitor[] monitor(Condition<Monitor> condition) {
+		return ArrayTools.asFilteredArray(this.monitors.values(), Monitor.class, condition);
 	}
 }
