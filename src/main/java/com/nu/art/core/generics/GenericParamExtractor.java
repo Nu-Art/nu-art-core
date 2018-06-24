@@ -89,8 +89,10 @@ public class GenericParamExtractor {
 
 						Type[] e1 = extractor.getTypes(genericInterface);
 						Type type1 = e1[index];
-						if (type1 instanceof Class)
-							return (Class<K>) type1;
+
+						Class<K> toRet = extractor.convertToClass(type1);
+						if (toRet != null)
+							return toRet;
 
 						return (Class<K>) genericParamsTypes.get(((TypeVariable) type1).getName());
 					}

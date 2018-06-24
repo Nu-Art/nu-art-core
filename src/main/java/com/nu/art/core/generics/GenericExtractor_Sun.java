@@ -18,8 +18,12 @@
 
 package com.nu.art.core.generics;
 
+import com.nu.art.core.tools.ArrayTools;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+
+import sun.reflect.generics.reflectiveObjects.GenericArrayTypeImpl;
 
 /**
  * Created by tacb0ss on 05/04/2018.
@@ -53,5 +57,19 @@ public class GenericExtractor_Sun
 	public Type getRawType(Type genericInterface)
 		throws IllegalAccessException {
 		return (Type) rawField.get(genericInterface);
+	}
+
+	@Override
+	public <K> Class<K> convertToClass(Type type) {
+		if (type instanceof Class)
+			return (Class<K>) type;
+
+		if (type instanceof GenericArrayTypeImpl) {
+			Class<?> c = convertToClass(((GenericArrayTypeImpl) type).getGenericComponentType());
+			if (c != null)
+				return (Class<K>) ArrayTools.getGenericArrayType(c, 1);
+		}
+
+		return null;
 	}
 }

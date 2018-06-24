@@ -59,4 +59,12 @@ public class GenericExtractor_Apache
 		throws IllegalAccessException, ClassNotFoundException {
 		return Class.forName((String) rawField.get(genericInterface));
 	}
+
+	@Override
+	public <K> Class<K> convertToClass(Type type) {
+		if (type instanceof Class)
+			return (Class<K>) type;
+
+		return null;
+	}
 }

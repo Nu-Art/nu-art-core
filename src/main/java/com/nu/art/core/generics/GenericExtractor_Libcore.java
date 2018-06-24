@@ -18,7 +18,11 @@
 
 package com.nu.art.core.generics;
 
+import com.nu.art.core.tools.ArrayTools;
+
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
 /**
@@ -29,12 +33,13 @@ public class GenericExtractor_Libcore
 	implements IGenericParamExtractor {
 
 	private final Field rawField;
+	private final Method getGenericComponentType;
 	private Field argsField;
 
 	private Field resolvedTypesField;
 
 	public GenericExtractor_Libcore()
-		throws NoSuchFieldException, ClassNotFoundException {
+		throws NoSuchFieldException, ClassNotFoundException, NoSuchMethodException {
 		Class<?> parametrizedType = Class.forName("libcore.reflect.ParameterizedTypeImpl");
 		argsField = parametrizedType.getDeclaredField("args");
 		argsField.setAccessible(true);
@@ -45,6 +50,10 @@ public class GenericExtractor_Libcore
 		Class<?> listOfTypes = Class.forName("libcore.reflect.ListOfTypes");
 		resolvedTypesField = listOfTypes.getDeclaredField("resolvedTypes");
 		resolvedTypesField.setAccessible(true);
+
+		getGenericComponentType = Class.forName("libcore.reflect.GenericArrayTypeImpl").getMethod("getGenericComponentType");
+
+		//(() type1).getGenericComponentType()
 	}
 
 	@Override
@@ -57,5 +66,20 @@ public class GenericExtractor_Libcore
 	public Type getRawType(Type genericInterface)
 		throws IllegalAccessException, ClassNotFoundException {
 		return Class.forName((String) rawField.get(genericInterface));
+	}
+
+	@Override
+	public <K> Class<K> convertToClass(Type type)
+		throws InvocationTargetException, IllegalAccessException {
+		if (type instanceof Class)
+			return (Class<K>) type;
+
+		if (type.getClass().getName().equals("libcore.reflect.GenericArrayTypeImpl")) {
+			Class<?> c = convertToClass((Type) getGenericComponentType.invoke(type));
+			if (c != null)
+				return (Class<K>) ArrayTools.getGenericArrayType(c, 1);
+		}
+
+		return null;
 	}
 }

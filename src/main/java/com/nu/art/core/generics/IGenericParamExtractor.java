@@ -18,6 +18,7 @@
 
 package com.nu.art.core.generics;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 
 public interface IGenericParamExtractor {
@@ -27,4 +28,7 @@ public interface IGenericParamExtractor {
 
 	Type getRawType(Type genericInterface)
 		throws IllegalAccessException, ClassNotFoundException;
+
+	<K> Class<K> convertToClass(Type type)
+		throws InvocationTargetException, IllegalAccessException;
 }
