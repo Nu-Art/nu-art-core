@@ -47,6 +47,11 @@ public class FileTools {
 		}
 	}
 
+	public static void createNewFile(String file)
+		throws IOException {
+		createNewFile(new File(file));
+	}
+
 	public static void createNewFile(File file)
 		throws IOException {
 		if (file.exists()) {
@@ -155,6 +160,11 @@ public class FileTools {
 		}
 
 		newFile.setLastModified(source.lastModified());
+	}
+
+	public static void delete(String toDelete)
+		throws IOException {
+		delete(new File(toDelete));
 	}
 
 	public static void delete(File toDelete)
