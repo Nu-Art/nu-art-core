@@ -32,7 +32,8 @@ public class GenericParamExtractor {
 	private static final Class<? extends IGenericParamExtractor>[] extractorTypes = new Class[]{
 		GenericExtractor_Libcore.class,
 		GenericExtractor_Sun.class,
-		GenericExtractor_Apache.class
+		GenericExtractor_Apache.class,
+		GenericExtractor_NotSupported.class
 	};
 
 	public static final GenericParamExtractor _GenericParamExtractor = new GenericParamExtractor();
