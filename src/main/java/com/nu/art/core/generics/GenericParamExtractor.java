@@ -51,6 +51,7 @@ public class GenericParamExtractor {
 		for (Class<? extends IGenericParamExtractor> extractorType : extractorTypes) {
 			try {
 				extractor = extractorType.newInstance();
+				return;
 			} catch (Throwable ignore) {}
 		}
 
