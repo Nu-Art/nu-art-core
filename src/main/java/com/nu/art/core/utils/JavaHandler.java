@@ -8,16 +8,35 @@ public final class JavaHandler {
 
 	private boolean running = true;
 	private Thread thread;
+	private final Executable _cache = new Executable(0, null);
 
 	private class Executable {
 
-		final Runnable toExecute;
+		Runnable toExecute;
 
 		final long when;
 
-		private Executable(Runnable toExecute, long when) {
+		private Executable(long when, Runnable toExecute) {
 			this.toExecute = toExecute;
 			this.when = when;
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (this == o)
+				return true;
+
+			if (o == null || getClass() != o.getClass())
+				return false;
+
+			Executable that = (Executable) o;
+
+			return toExecute.equals(that.toExecute);
+		}
+
+		@Override
+		public int hashCode() {
+			return toExecute.hashCode();
 		}
 	}
 
@@ -43,7 +62,7 @@ public final class JavaHandler {
 								continue;
 
 							lock.wait(sleepInterval - 5);
-						} catch (InterruptedException ignore) { }
+						} catch (InterruptedException ignore) {}
 					}
 				}
 			}
@@ -77,35 +96,55 @@ public final class JavaHandler {
 
 	private ArrayList<Executable> queue = new ArrayList<>();
 
-	public void post(Runnable toExecute) {
-		postImpl(toExecute, System.currentTimeMillis());
+	public void post(Runnable action) {
+		post(0, action);
 	}
 
-	public void post(int delay, Runnable toExecute) {
-		postImpl(toExecute, System.currentTimeMillis() + delay);
+	public void post(int delay, Runnable action) {
+		postAt(System.currentTimeMillis() + delay, action);
 	}
 
-	private void postImpl(Runnable toExecute, long when) {
+	public void postAt(long when, Runnable action) {
+		postImpl(when, action);
+	}
+
+	private void postImpl(long when, Runnable action) {
 		synchronized (lock) {
-			queue.add(new Executable(toExecute, when));
+			queue.add(new Executable(when, action));
 			sortQueue();
-			recalculateSleep();
+			lock.notify();
 		}
 	}
 
-	public boolean remove(Runnable toRemove) {
+	public boolean remove(Runnable action) {
 		synchronized (lock) {
-			boolean remove = queue.remove(new Executable(toRemove, 0));
-			if (remove) {
-				recalculateSleep();
-			}
+			_cache.toExecute = action;
+			boolean remove = queue.remove(_cache);
+			if (remove)
+				lock.notify();
+
 			return remove;
 		}
 	}
 
-	private void recalculateSleep() {
+	public boolean removeAndPost(Runnable action) {
+		return removeAndPost(0, action);
+	}
+
+	public boolean removeAndPost(int delay, Runnable action) {
+		return removeAndPostAt(System.currentTimeMillis() + delay, action);
+	}
+
+	public boolean removeAndPostAt(long when, Runnable action) {
 		synchronized (lock) {
+			_cache.toExecute = action;
+
+			boolean remove = queue.remove(_cache);
+			queue.add(new Executable(when, action));
+			sortQueue();
 			lock.notify();
+
+			return remove;
 		}
 	}
 
