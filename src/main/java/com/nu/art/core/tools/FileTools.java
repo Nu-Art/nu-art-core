@@ -438,6 +438,14 @@ public class FileTools {
 
 	public static void renameFile(File origin, File target)
 		throws IOException {
+		if (target.exists())
+			throw new IOException("Target already exists: " + target.getAbsolutePath());
+
+		File parentFile = target.getParentFile();
+		if (!parentFile.exists())
+			if (!parentFile.mkdirs())
+				throw new IOException("Unable to create parent folder: " + parentFile.getAbsolutePath());
+
 		if (!origin.renameTo(target))
 			throw new IOException("Unable to rename file from: " + origin.getName() + " => " + target.getName());
 	}
