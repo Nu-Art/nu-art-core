@@ -63,7 +63,7 @@ public class Test_Archiver {
 	@Test
 	public void test_AddFile()
 		throws IOException {
-		String testName = "test_CopyFiles";
+		String testName = "test_CopyFilesSync";
 		File outputFile = new File(path + "/output", testName + ".zip");
 
 		new ArchiveWriter().open(outputFile).addFile(testFiles[0]).close();

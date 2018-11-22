@@ -11,8 +11,28 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class FileCopy {
+
+	public interface FileCopyListener {
+
+		void onSuccess();
+
+		void onError(Throwable t);
+	}
+
+	public FileCopy setThreadsCount(int threadCount, FileCopyListener completionListener) {
+		if (threadCount <= 0)
+			return this;
+
+		todo = new RunnableQueue();
+		todo.createThreads("copy", threadCount);
+		this.completionListener = completionListener;
+		return this;
+	}
 
 	public class FileProgress {
 
@@ -40,8 +60,10 @@ public class FileCopy {
 		}
 	});
 
-	private RunnableQueue todo = new RunnableQueue();
+	private RunnableQueue todo;
+	private AtomicInteger inProgress = new AtomicInteger(0);
 	private File targetFolder;
+	private FileCopyListener completionListener;
 
 	public FileCopy setBufferSize(int bufferSize) {
 		this.bufferSize = bufferSize;
@@ -67,20 +89,45 @@ public class FileCopy {
 		if (!file.exists())
 			throw new FileNotFoundException("File not found: " + file.getAbsolutePath());
 
-		File targetFolder = new File(this.targetFolder, relativePath);
-		if (!targetFolder.exists())
-			FileTools.mkDir(targetFolder);
-
-		_copy(file, targetFolder);
+		_copy(file, new File(this.targetFolder, relativePath));
 		return this;
 	}
 
-	private void _copy(final File source, File targetFolder)
-		throws IOException {
-		if (source.isDirectory())
-			_copyFolder(source, targetFolder);
+	private void _copy(final File source, final File targetFolder) {
+		inProgress.incrementAndGet();
+		if (!targetFolder.exists()) {
+			try {
+				FileTools.mkDir(targetFolder);
+			} catch (IOException e) {
+				onError(e);
+				return;
+			}
+		}
+
+		Runnable runnable = new Runnable() {
+			@Override
+			public void run() {
+				log("Copy: " + source.getName() + "=> To: " + targetFolder.getName());
+				try {
+
+					if (source.isDirectory())
+						_copyFolder(source, targetFolder);
+					else
+						_copyFile(source, new File(targetFolder, source.getName()));
+				} catch (IOException e) {
+					onError(e);
+				} finally {
+					int inProcess = inProgress.decrementAndGet();
+					if (inProcess == 0)
+						if (completionListener != null)
+							completionListener.onSuccess();
+				}
+			}
+		};
+		if (todo != null)
+			todo.addItem(runnable);
 		else
-			_copyFile(source, new File(targetFolder, source.getName()));
+			runnable.run();
 	}
 
 	private void _copyFile(File sourceFile, File targetFile)
@@ -88,11 +135,7 @@ public class FileCopy {
 		copyFileImpl(sourceFile, targetFile);
 	}
 
-	private void _copyFolder(File sourceFolder, File targetFolder)
-		throws IOException {
-		if (!targetFolder.exists())
-			FileTools.mkDir(targetFolder);
-
+	private void _copyFolder(File sourceFolder, File targetFolder) {
 		File[] files = sourceFolder.listFiles();
 		if (files == null)
 			return;
@@ -155,6 +198,36 @@ public class FileCopy {
 
 	private void onError(Throwable e) {
 		todo.clear();
+		e.printStackTrace();
 		this.error = e;
+	}
+
+	private final static SimpleDateFormat DefaultTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+	private SynchronizedObject<StringBuffer> logBuffers = new SynchronizedObject<>(new Getter<StringBuffer>() {
+		@Override
+		public StringBuffer get() {
+			return new StringBuffer();
+		}
+	});
+
+	private final Date date = new Date();
+
+	private void log(String message) {
+		date.setTime(System.currentTimeMillis());
+
+		StringBuffer buffer = logBuffers.get();
+		buffer.setLength(0);
+		buffer.append(DefaultTimeFormat.format(date)).append(" ");
+		buffer.append(Thread.currentThread()).append("/");
+		buffer.append("File Copy").append(": ");
+
+		if (message != null)
+			buffer.append(message).append("\n");
+
+		System.out.print(buffer.toString());
+	}
+
+	private void logError(String message) {
+		System.err.println(message);
 	}
 }
