@@ -25,6 +25,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -652,5 +653,12 @@ public class ArrayTools {
 			toRet.add(instance);
 		}
 		return asArray(toRet, type);
+	}
+
+	public static <T> List<T> asList(T[] array) {
+		if (array == null)
+			return Collections.emptyList();
+
+		return Arrays.asList(array);
 	}
 }
