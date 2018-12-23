@@ -102,7 +102,8 @@ public class FileTools {
 			throw new IOException("Destination MUST be a folder");
 		}
 
-		if (!destinationFolder.getAbsolutePath().startsWith(source.getAbsolutePath())) {
+		// /a/b/c.txt => /a/d/e
+		if (destinationFolder.getAbsolutePath().startsWith(source.getAbsolutePath())) {
 			throw new IOException("Recursive copying is not allowed");
 		}
 
