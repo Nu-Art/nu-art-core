@@ -90,7 +90,9 @@ public abstract class PoolQueue<Type> {
 		}
 	}
 
-	protected abstract void onExecutionError(Type item, Throwable e);
+	protected void onExecutionError(Type item, Throwable e) {
+		e.printStackTrace();
+	}
 
 	protected abstract void executeAction(Type type)
 		throws Throwable;
