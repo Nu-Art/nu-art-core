@@ -96,6 +96,12 @@ public final class JavaHandler {
 
 	private ArrayList<Executable> queue = new ArrayList<>();
 
+	public int getItemsCount() {
+		synchronized (lock) {
+			return queue.size();
+		}
+	}
+
 	public void post(Runnable action) {
 		post(0, action);
 	}
@@ -124,6 +130,13 @@ public final class JavaHandler {
 				lock.notify();
 
 			return remove;
+		}
+	}
+
+	public void clear() {
+		synchronized (lock) {
+			queue.clear();
+			lock.notify();
 		}
 	}
 
