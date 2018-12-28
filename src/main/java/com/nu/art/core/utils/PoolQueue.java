@@ -18,6 +18,8 @@
 
 package com.nu.art.core.utils;
 
+import com.nu.art.core.exceptions.runtime.BadImplementationException;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -172,6 +174,9 @@ public abstract class PoolQueue<Type> {
 	}
 
 	public final void createThreads(String name, int count) {
+		if (count < 1)
+			throw new BadImplementationException("Threads count request is '" + count + "' but MUST be >= 1");
+
 		for (int i = 0; i < count; i++) {
 			Thread t = new Thread(queueAction, name + " #" + i);
 			t.start();
