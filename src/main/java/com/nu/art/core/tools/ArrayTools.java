@@ -632,6 +632,10 @@ public class ArrayTools {
 		return toRet;
 	}
 
+	public static <ItemType> ItemType[] reverseGenericArray(ItemType[] originalArray) {
+		return reverseGenericArray(originalArray, newInstance((Class<ItemType>) originalArray.getClass().getComponentType(), originalArray.length));
+	}
+
 	public static <ItemType> ItemType[] reverseGenericArray(ItemType[] originalArray, ItemType[] reversed) {
 		int j = 0;
 		for (int i = originalArray.length - 1; i >= 0; i--) {
