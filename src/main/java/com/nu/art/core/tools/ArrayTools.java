@@ -42,7 +42,7 @@ public class ArrayTools {
 		}
 	};
 
-	public static String join(String delimiter, Object... elements) {
+	public static <T> String join(String delimiter, T... elements) {
 		if (elements == null)
 			return "null";
 
