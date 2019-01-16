@@ -22,17 +22,74 @@ import java.util.HashSet;
 
 public class DebugFlags {
 
-	private static final HashSet<String> debugFlags = new HashSet<>();
+	private static final DebugFlags instance = new DebugFlags();
 
-	public static void addDebugFlag(String flag) {
-		debugFlags.add(flag);
+	private final HashSet<DebugFlag> AllDebugFlags = new HashSet<>();
+	private final HashSet<String> ActiveDebugFlags = new HashSet<>();
+
+	private DebugFlags() { }
+
+	public static DebugFlag createFlag(Class<?> forType) {
+		return instance.new DebugFlagImpl(forType);
 	}
 
-	public static void removeDebugFlag(String flag) {
-		debugFlags.remove(flag);
+	public static DebugFlag createFlag(String key) {
+		return instance.new DebugFlagImpl(key);
 	}
 
-	public static boolean isDebuggableFlag(String flag) {
-		return debugFlags.contains(flag);
+	private class DebugFlagImpl
+		implements DebugFlag {
+
+		private final String flag;
+
+		private DebugFlagImpl(Class<?> forType) {
+			this(forType.getSimpleName());
+		}
+
+		private DebugFlagImpl(String key) {
+			flag = key;
+			AllDebugFlags.add(this);
+		}
+
+		@Override
+		public String getName() {
+			return flag;
+		}
+
+		@Override
+		public void enable(boolean enable) {
+			if (enable)
+				enable();
+			else
+				disable();
+		}
+
+		@Override
+		public void enable() {
+			ActiveDebugFlags.add(flag);
+		}
+
+		@Override
+		public void disable() {
+			ActiveDebugFlags.remove(flag);
+		}
+
+		@Override
+		public boolean isEnabled() {
+			return ActiveDebugFlags.contains(flag);
+		}
+	}
+
+	public interface DebugFlag {
+
+		String getName();
+
+		void enable(boolean enable);
+
+		void enable();
+
+		void disable();
+
+		boolean isEnabled();
 	}
 }
