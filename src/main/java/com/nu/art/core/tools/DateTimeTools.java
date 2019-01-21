@@ -18,11 +18,15 @@
 
 package com.nu.art.core.tools;
 
+import com.nu.art.core.exceptions.runtime.MUST_NeverHappenException;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateTimeTools {
+
+	private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd ss");
 
 	public static final long Millies = 1;
 
@@ -73,5 +77,17 @@ public class DateTimeTools {
 		toRet = toRet.replace("ss", (seconds < 10 ? "0" : "") + seconds);
 		toRet = toRet.replace("ms", (milliseconds < 10 ? "00" : milliseconds < 100 ? "0" : "") + milliseconds);
 		return toRet;
+	}
+
+	public static long getMidnight(long timestamp) {
+		try {
+			return simpleDateFormat.parse(simpleDateFormat.format(new Date(timestamp))).getTime();
+		} catch (ParseException e) {
+			throw new MUST_NeverHappenException("format and parsing of the same string failed???", e);
+		}
+	}
+
+	public static long extractHoursAndMinutes(long timestamp) {
+		return timestamp - getMidnight(timestamp);
 	}
 }
