@@ -26,6 +26,8 @@ import java.util.Date;
 
 public class DateTimeTools {
 
+	public static final SimpleDateFormat Format_yyyyMMdd__HHmmss = new SimpleDateFormat("yyyy-MM-dd__HH-mm-ss");
+
 	private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd ss");
 
 	public static final long Millies = 1;
