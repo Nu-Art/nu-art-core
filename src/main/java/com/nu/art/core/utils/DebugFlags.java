@@ -40,6 +40,7 @@ public class DebugFlags {
 	private class DebugFlagImpl
 		implements DebugFlag {
 
+		private Class<?> type;
 		private final String flag;
 
 		private DebugFlagImpl(Class<?> forType) {
@@ -62,6 +63,28 @@ public class DebugFlags {
 				enable();
 			else
 				disable();
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (this == o)
+				return true;
+			if (o == null || getClass() != o.getClass())
+				return false;
+
+			DebugFlagImpl debugFlag = (DebugFlagImpl) o;
+
+			if (type != null ? !type.equals(debugFlag.type) : debugFlag.type != null)
+				return false;
+
+			return flag != null ? flag.equals(debugFlag.flag) : debugFlag.flag == null;
+		}
+
+		@Override
+		public int hashCode() {
+			int result = type != null ? type.hashCode() : 0;
+			result = 31 * result + (flag != null ? flag.hashCode() : 0);
+			return result;
 		}
 
 		@Override
