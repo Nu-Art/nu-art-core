@@ -16,7 +16,7 @@ import static com.nu.art.core.archiver.ArchiveReader.OverridePolicy.DoNotOverrid
 import static com.nu.art.core.archiver.ArchiveReader.OverridePolicy.ForceDelete;
 
 /**
- * Created by tacb0ss on 26/04/2018.
+ * Created by TacB0sS on 26/04/2018.
  */
 
 public class ArchiveReader {

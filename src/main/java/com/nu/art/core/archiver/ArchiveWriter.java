@@ -11,7 +11,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
- * Created by tacb0ss on 26/04/2018.
+ * Created by TacB0sS on 26/04/2018.
  */
 
 public class ArchiveWriter {

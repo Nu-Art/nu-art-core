@@ -26,7 +26,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
 /**
- * Created by tacb0ss on 05/04/2018.
+ * Created by TacB0sS on 05/04/2018.
  */
 
 public class GenericExtractor_Libcore

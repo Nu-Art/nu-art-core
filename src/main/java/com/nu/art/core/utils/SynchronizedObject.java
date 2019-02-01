@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.WeakHashMap;
 
 /**
- * Created by tacb0ss on 08/04/2018.
+ * Created by TacB0sS on 08/04/2018.
  */
 
 public class SynchronizedObject<Type> {

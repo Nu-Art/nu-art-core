@@ -36,7 +36,7 @@ import static com.nu.art.core.tools.FileTools.getRunningDirectoryPath;
 import static com.nu.art.core.tools.FileTools.isParentOfRunningFolder;
 
 /**
- * Created by tacb0ss on 05/04/2018.
+ * Created by TacB0sS on 05/04/2018.
  */
 
 public class Test_Archiver {
