@@ -23,12 +23,14 @@ import com.nu.art.core.exceptions.runtime.MUST_NeverHappenException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.TimeZone;
 
 public class DateTimeTools {
 
-	public static final SimpleDateFormat Format_yyyyMMdd__HHmmss = new SimpleDateFormat("yyyy-MM-dd__HH-mm-ss");
+	private HashMap<String, SimpleDateFormat> formats = new HashMap<>();
 
-	private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd ss");
+	private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	public static final long Millies = 1;
 
@@ -45,6 +47,23 @@ public class DateTimeTools {
 	public static final long Month = (long) (Week * 4.23);
 
 	public static final long Year = Month * 12;
+
+	public static String formatDate(String format) {
+		return formatDate(format, System.currentTimeMillis(), null);
+	}
+
+	public static String formatDate(String format, long timestamp) {
+		return formatDate(format, timestamp, null);
+	}
+
+	public static String formatDate(String format, long timestamp, TimeZone timezone) {
+		if (timezone == null)
+			timezone = TimeZone.getDefault();
+
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+		simpleDateFormat.setTimeZone(timezone);
+		return simpleDateFormat.format(new Date(timestamp));
+	}
 
 	public static final Date getDateFromString(SimpleDateFormat dateFormat, String date)
 		throws ParseException {
@@ -74,9 +93,13 @@ public class DateTimeTools {
 		int milliseconds = (int) duration;
 
 		toRet = toRet.replace("dd", (days < 10 ? "0" : "") + days);
+		toRet = toRet.replace("d", (days < 10 ? "" : "") + days);
 		toRet = toRet.replace("hh", (hours < 10 ? "0" : "") + hours);
+		toRet = toRet.replace("h", (hours < 10 ? "" : "") + hours);
 		toRet = toRet.replace("mm", (minutes < 10 ? "0" : "") + minutes);
+		toRet = toRet.replace("m", (minutes < 10 ? "" : "") + minutes);
 		toRet = toRet.replace("ss", (seconds < 10 ? "0" : "") + seconds);
+		toRet = toRet.replace("s", (seconds < 10 ? "" : "") + seconds);
 		toRet = toRet.replace("ms", (milliseconds < 10 ? "00" : milliseconds < 100 ? "0" : "") + milliseconds);
 		return toRet;
 	}
