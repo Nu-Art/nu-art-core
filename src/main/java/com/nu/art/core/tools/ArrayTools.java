@@ -128,6 +128,14 @@ public class ArrayTools {
 		return Arrays.asList(arr).indexOf(element);
 	}
 
+	public static <T> T lastElement(T[] arr) {
+		return arr[arr.length - 1];
+	}
+
+	public static <T> T firstElement(T[] arr) {
+		return arr[0];
+	}
+
 	public static <T> boolean contains(T[] arr, T item) {
 		return Arrays.asList(arr).contains(item);
 	}
