@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
@@ -190,6 +191,10 @@ public class ArrayTools {
 			items.add(keys.next());
 		}
 		return asArray(items, arrayType);
+	}
+
+	public static <ArrayType> ArrayType[] asArray(Enumeration<ArrayType> enumeration, Class<ArrayType> arrayType) {
+		return asArray(Collections.list(enumeration), arrayType);
 	}
 
 	public static <ArrayType> ArrayType[] newInstance(Class<ArrayType> arrayType, int size) {
