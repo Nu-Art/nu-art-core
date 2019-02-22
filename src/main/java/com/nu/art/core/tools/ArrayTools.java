@@ -67,13 +67,17 @@ public class ArrayTools {
 	}
 
 	public static <From, To> To[] map(Class<To> toTypeArray, Function<From, To> mapper, From... source) {
+		return map(toTypeArray, mapper, Arrays.asList(source));
+	}
+
+	public static <From, To> To[] map(Class<To> toTypeArray, Function<From, To> mapper, List<From> source) {
 		int arrayLength = 0;
 		if (source != null)
-			arrayLength = source.length;
+			arrayLength = source.size();
 
 		To[] target = newInstance(toTypeArray, arrayLength);
 		for (int i = 0; i < arrayLength; i++) {
-			target[i] = mapper.map(source[i]);
+			target[i] = mapper.map(source.get(i));
 		}
 		return target;
 	}

@@ -18,8 +18,11 @@
 
 package com.nu.art.core.utils;
 
+import com.nu.art.core.tools.ArrayTools;
+
 import java.util.HashSet;
 
+@SuppressWarnings("unused")
 public class DebugFlags {
 
 	private static final DebugFlags instance = new DebugFlags();
@@ -35,6 +38,10 @@ public class DebugFlags {
 
 	public static DebugFlag createFlag(String key) {
 		return instance.new DebugFlagImpl(key);
+	}
+
+	public static DebugFlag[] getAllFlags() {
+		return ArrayTools.asArray(instance.AllDebugFlags, DebugFlag.class);
 	}
 
 	private class DebugFlagImpl
