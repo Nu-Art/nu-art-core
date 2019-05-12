@@ -174,7 +174,7 @@ public class ArrayTools {
 	}
 
 	public static <SuperType, ArrayType extends SuperType> SuperType[] asArray(Collection<ArrayType> collection, Class<SuperType> arrayType) {
-		return collection.toArray(newInstance(arrayType, collection.size()));
+		return collection.toArray(newInstance(arrayType, 0));
 	}
 
 	//	public static <ArrayType> ArrayType[] asArray(Set<ArrayType> set, Class<ArrayType> arrayType) {

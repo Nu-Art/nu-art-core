@@ -20,5 +20,21 @@ package com.nu.art.core.interfaces;
 
 public interface Condition<Type> {
 
+	Condition<?> Condition_AlwaysTrue = new Condition<Object>() {
+
+		@Override
+		public boolean checkCondition(Object o) {
+			return true;
+		}
+	};
+
+	Condition<?> Condition_AlwaysFalse = new Condition<Object>() {
+
+		@Override
+		public boolean checkCondition(Object o) {
+			return false;
+		}
+	};
+
 	boolean checkCondition(Type type);
 }
