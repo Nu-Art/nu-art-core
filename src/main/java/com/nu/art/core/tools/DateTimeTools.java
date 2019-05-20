@@ -24,13 +24,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class DateTimeTools {
 
-	private HashMap<String, SimpleDateFormat> formats = new HashMap<>();
-
-	private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	private static final HashMap<String, SimpleDateFormat> formats = new HashMap<>();
+	public static final String DATE_FORMAT__HH_mm_ss_dd_MM_yyyy = "HH:mm:ss_dd-MM-yyyy";
+	public static final String DATE_FORMAT__yyyy_MM_dd__HH_mm_ss = "yyyy-MM-dd__HH-mm-ss";
+	public static final String DATE_FORMAT__yyyy_MM_dd = "yyyy-MM-dd";
 
 	public static final long Millies = 1;
 
@@ -57,20 +59,39 @@ public class DateTimeTools {
 	}
 
 	public static String formatDate(String format, long timestamp, TimeZone timezone) {
-		if (timezone == null)
-			timezone = TimeZone.getDefault();
+		SimpleDateFormat simpleDateFormat;
+		if (timezone == null) {
+			simpleDateFormat = getCachedFormat(format);
+		} else {
+			simpleDateFormat = new SimpleDateFormat(format, Locale.US);
+			simpleDateFormat.setTimeZone(timezone);
+		}
 
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
-		simpleDateFormat.setTimeZone(timezone);
-		return simpleDateFormat.format(new Date(timestamp));
+		return formatDate(simpleDateFormat, new Date(timestamp));
 	}
 
-	public static final Date getDateFromString(SimpleDateFormat dateFormat, String date)
+	public static String formatDate(SimpleDateFormat format, Date date) {
+		return format.format(date);
+	}
+
+	public static Date parseDate(String format, String date)
+		throws ParseException {
+		return parseDate(getCachedFormat(format), date);
+	}
+
+	private static SimpleDateFormat getCachedFormat(String format) {
+		SimpleDateFormat simpleDateFormat = formats.get(format);
+		if (simpleDateFormat == null)
+			formats.put(format, simpleDateFormat = new SimpleDateFormat(format, Locale.US));
+		return simpleDateFormat;
+	}
+
+	public static Date parseDate(SimpleDateFormat dateFormat, String date)
 		throws ParseException {
 		return dateFormat.parse(date);
 	}
 
-	public static final String getDurationAsString(String format, long duration) {
+	public static String getDurationAsString(String format, long duration) {
 		if (duration < 0) {
 			format = "-" + format;
 			duration *= -1;
@@ -106,7 +127,7 @@ public class DateTimeTools {
 
 	public static long getMidnight(long timestamp) {
 		try {
-			return simpleDateFormat.parse(simpleDateFormat.format(new Date(timestamp))).getTime();
+			return parseDate(DATE_FORMAT__yyyy_MM_dd, formatDate(DATE_FORMAT__yyyy_MM_dd, timestamp)).getTime();
 		} catch (ParseException e) {
 			throw new MUST_NeverHappenException("format and parsing of the same string failed???", e);
 		}
