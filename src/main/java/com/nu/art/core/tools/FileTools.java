@@ -230,6 +230,11 @@ public class FileTools {
 		return appPath.substring(0, appPath.length() - 1);
 	}
 
+	public static void mkDir(String destination)
+		throws IOException {
+		mkDir(new File(destination));
+	}
+
 	public static void mkDir(File destination)
 		throws IOException {
 		Vector<File> toMake = new Vector<>();

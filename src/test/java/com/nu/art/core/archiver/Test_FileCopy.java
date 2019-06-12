@@ -1,4 +1,4 @@
-package com.nu.art.core.test.archiver;
+package com.nu.art.core.archiver;
 
 import com.nu.art.core.file.Charsets;
 import com.nu.art.core.file.FileCopy;

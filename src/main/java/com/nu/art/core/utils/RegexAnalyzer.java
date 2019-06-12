@@ -121,7 +121,7 @@ public class RegexAnalyzer {
 	 * @return The strings of the specified group, from the specified instance of the complete regex.
 	 */
 	public final String[] findRegex(int instance, String fullText, int... groupIndices) {
-		int instanceIndex = 1;
+		int instanceIndex = 0;
 		Pattern p = caseSensitive ? Pattern.compile(toFind) : Pattern.compile(toFind, Pattern.CASE_INSENSITIVE);
 		while (instanceIndex <= instance) {
 			Matcher m = p.matcher(fullText);

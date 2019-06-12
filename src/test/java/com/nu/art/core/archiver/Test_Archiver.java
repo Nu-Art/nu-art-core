@@ -16,11 +16,9 @@
  * limitations under the License.
  */
 
-package com.nu.art.core.test.archiver;
+package com.nu.art.core.archiver;
 
-import com.nu.art.core.archiver.ArchiveReader;
 import com.nu.art.core.archiver.ArchiveReader.OverridePolicy;
-import com.nu.art.core.archiver.ArchiveWriter;
 import com.nu.art.core.exceptions.runtime.BadImplementationException;
 import com.nu.art.core.file.Charsets;
 import com.nu.art.core.tools.FileTools;
