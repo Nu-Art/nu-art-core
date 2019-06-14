@@ -29,7 +29,9 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 
+import static com.nu.art.core.archiver.ArchiveReader.OverridePolicy.DoNotOverride;
 import static com.nu.art.core.archiver.ArchiveReader.OverridePolicy.ForceDelete;
+import static com.nu.art.core.archiver.ArchiveReader.OverridePolicy.Merge;
 import static com.nu.art.core.tools.FileTools.getRunningDirectoryPath;
 import static com.nu.art.core.tools.FileTools.isParentOfRunningFolder;
 
@@ -40,8 +42,8 @@ import static com.nu.art.core.tools.FileTools.isParentOfRunningFolder;
 public class Test_Archiver {
 
 	private static boolean setUpIsDone = false;
-	private File[] testFiles = new File[10];
-	private String path = "nu-art-core/build/test/archiver";
+	private static File[] testFiles = new File[10];
+	private static File resourcesFolder = new File("build/test/archiver");
 
 	@Before
 	public void setUp()
@@ -51,7 +53,7 @@ public class Test_Archiver {
 		}
 
 		for (int i = 1; i < 1 + testFiles.length; i++) {
-			testFiles[i - 1] = new File(path + "/data", "temp-file-" + i + ".txt");
+			testFiles[i - 1] = new File(resourcesFolder + "/data", "temp-file-" + i + ".txt");
 			FileTools.writeToFile("test file " + i, testFiles[i - 1], Charsets.UTF_8);
 		}
 
@@ -62,51 +64,62 @@ public class Test_Archiver {
 	public void test_AddFile()
 		throws IOException {
 		String testName = "test_CopyFilesSync";
-		File outputFile = new File(path + "/output", testName + ".zip");
+		File zipFile = new File(resourcesFolder + "/output", testName + ".zip");
+		File outputFolder = new File(resourcesFolder + "/extracted/" + testName);
+		FileTools.delete(outputFolder);
 
-		new ArchiveWriter().open(outputFile).addFile(testFiles[0]).close();
-		new ArchiveReader().open(outputFile).setOutputFolder(path + "/extracted/" + testName).extract();
+		new ArchiveWriter().open(zipFile).addFile(testFiles[0]).close();
+		new ArchiveReader().open(zipFile).setOutputFolder(outputFolder).extract();
 	}
 
 	@Test
 	public void test_AddFileIntoFolder()
 		throws IOException {
 		String testName = "test_AddFileIntoFolder";
-		File outputFile = new File(path + "/output", testName + ".zip");
+		File zipFile = new File(resourcesFolder + "/output", testName + ".zip");
+		File outputFolder = new File(resourcesFolder + "/extracted/" + testName);
+		FileTools.delete(outputFolder);
 
-		new ArchiveWriter().open(outputFile).addFile("here", testFiles[0]).close();
-		new ArchiveReader().open(outputFile).setOutputFolder(path + "/extracted/" + testName).overridePolicy(ForceDelete).extract();
+		new ArchiveWriter().open(zipFile).addFile("here", testFiles[0]).close();
+		new ArchiveReader().open(zipFile).setOutputFolder(outputFolder).overridePolicy(ForceDelete).extract();
 	}
 
 	@Test
 	public void test_AddFilesIntoDifferentFolder()
 		throws IOException {
 		String testName = "test_AddFilesIntoDifferentFolder";
-		File outputFile = new File(path + "/output", testName + ".zip");
+		File zipFile = new File(resourcesFolder + "/output", testName + ".zip");
+		File outputFolder = new File(resourcesFolder + "/extracted/" + testName);
+		FileTools.delete(outputFolder);
 
-		new ArchiveWriter().open(outputFile).addFile("here", testFiles[0]).addFile("here1", testFiles[2]).close();
-		new ArchiveReader().open(outputFile).setOutputFolder(path + "/extracted/" + testName).extract();
+		new ArchiveWriter().open(zipFile).addFile("here", testFiles[0]).addFile("here1", testFiles[2]).close();
+		new ArchiveReader().open(zipFile).setOutputFolder(outputFolder).extract();
 	}
 
 	@Test
 	public void test_AddFilesIntoFolder()
 		throws IOException {
 		String testName = "test_AddFilesIntoFolder";
-		File outputFile = new File(path + "/output", testName + ".zip");
+		File outputFile = new File(resourcesFolder + "/output", testName + ".zip");
+		File outputFolder = new File(resourcesFolder + "/extracted/" + testName);
+		FileTools.delete(outputFolder);
 
 		new ArchiveWriter().open(outputFile).addFiles("here", testFiles[0], testFiles[2]).close();
-		new ArchiveReader().open(outputFile).setOutputFolder(path + "/extracted/" + testName).extract();
+		new ArchiveReader().open(outputFile).setOutputFolder(outputFolder).extract();
 	}
 
 	@Test
 	public void test_AddMultipleFilesIntoDifferentFolder()
 		throws IOException {
 		String testName = "test_AddMultipleFilesIntoDifferentFolder";
-		File outputFile = new File(path + "/output", testName + ".zip");
+		File outputFile = new File(resourcesFolder + "/output", testName + ".zip");
+		File outputFolder = new File(resourcesFolder + "/extracted/" + testName);
+		FileTools.delete(outputFolder);
 
 		new ArchiveWriter().open(outputFile).addFiles("here", testFiles[0], testFiles[2]).addFiles("here1", testFiles[1], testFiles[3]).close();
-		new ArchiveReader().open(outputFile).setOutputFolder(path + "/extracted/" + testName).overridePolicy(ForceDelete).extract();
-		new ArchiveReader().open(outputFile).setOutputFolder(path + "/extracted/" + testName).overridePolicy(OverridePolicy.Merge).extract();
+		new ArchiveReader().open(outputFile).setOutputFolder(outputFolder).overridePolicy(DoNotOverride).extract();
+		new ArchiveReader().open(outputFile).setOutputFolder(outputFolder).overridePolicy(ForceDelete).extract();
+		new ArchiveReader().open(outputFile).setOutputFolder(outputFolder).overridePolicy(Merge).extract();
 	}
 
 	@Test

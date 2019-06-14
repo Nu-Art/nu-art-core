@@ -16,7 +16,7 @@ public class Test_FileCopy {
 	private static boolean setUpIsDone = false;
 	private static File[] testFiles = new File[10];
 	private static File[] testSubFiles = new File[10];
-	private static String path = "build/test/file-copy";
+	private static File path = new File("build/test/file-copy");
 	static String fileContent;
 
 	@Before
@@ -25,6 +25,7 @@ public class Test_FileCopy {
 		if (setUpIsDone) {
 			return;
 		}
+
 		boolean createNew = false;
 		StringBuilder stringBuilder = new StringBuilder();
 		for (int i = 0; i < 10000000; i++) {
@@ -34,22 +35,25 @@ public class Test_FileCopy {
 		fileContent = stringBuilder.toString();
 		for (int i = 1; i < 1 + testFiles.length; i++) {
 			testFiles[i - 1] = new File(path + "/data", "temp-file-" + i + ".txt");
-			if (createNew)
+			if (!testFiles[i - 1].exists() || createNew)
 				FileTools.writeToFile(fileContent, testFiles[i - 1], Charsets.UTF_8);
 		}
+
 		for (int i = 1; i < 1 + testSubFiles.length; i++) {
 			testSubFiles[i - 1] = new File(path + "/data/sub", "temp-sub-file-" + i + ".txt");
-			if (createNew)
+			if (!testSubFiles[i - 1].exists() || createNew)
 				FileTools.writeToFile(fileContent, testSubFiles[i - 1], Charsets.UTF_8);
 		}
+
 		for (int i = 1; i < 20; i++) {
 			File file = new File(path + "/data/sub/foo", "temp-sub-foo-file-" + i + ".txt");
-			if (createNew)
+			if (!file.exists() || createNew)
 				FileTools.writeToFile(fileContent, file, Charsets.UTF_8);
 		}
+
 		for (int i = 1; i < 20; i++) {
 			File file = new File(path + "/data/sub/bar", "temp-sub-bar-file-" + i + ".txt");
-			if (createNew)
+			if (!file.exists() || createNew)
 				FileTools.writeToFile(fileContent, file, Charsets.UTF_8);
 		}
 
