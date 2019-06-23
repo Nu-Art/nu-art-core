@@ -20,39 +20,26 @@ package com.nu.art.core.repository;
 
 import java.util.HashMap;
 
-public final class Repository
-	implements RepositoryDelegator {
+public final class Repository {
 
 	private final HashMap<RepositoryKey<?>, Object> map = new HashMap<>();
 
 	public Repository(Repository repository) {
-		embrace(repository);
+		putAll(repository);
 	}
 
 	public Repository() {}
 
-	@Override
 	public final <ItemType> void put(RepositoryKey<ItemType> key, ItemType value) {
 		map.put(key, value);
 	}
 
-	@Override
 	@SuppressWarnings("unchecked")
 	public final <ItemType> ItemType get(RepositoryKey<ItemType> key) {
 		return (ItemType) map.get(key);
 	}
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public final <ItemType> ItemType getOrThrowException(RepositoryKey<ItemType> key) {
-		ItemType item = (ItemType) map.get(key);
-		if (item == null) {
-			throw new RepositoryItemNotFoundException(key);
-		}
-		return item;
-	}
-
-	public final void embrace(Repository repository) {
+	public final void putAll(Repository repository) {
 		this.map.putAll(repository.map);
 	}
 
