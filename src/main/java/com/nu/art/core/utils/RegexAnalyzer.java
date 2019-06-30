@@ -59,7 +59,7 @@ public class RegexAnalyzer {
 				break;
 			}
 		}
-		return toRet.toArray(new String[toRet.size()]);
+		return toRet.toArray(new String[0]);
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class RegexAnalyzer {
 			}
 			// fullText = fullText.replaceFirst(toFind, "");
 		}
-		return instances.toArray(new String[instances.size()]);
+		return instances.toArray(new String[0]);
 	}
 
 	private void setRegex(String regex) {
