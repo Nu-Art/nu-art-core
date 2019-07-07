@@ -20,9 +20,14 @@ package com.nu.art.core.interfaces;
 
 import java.lang.reflect.Type;
 
-public interface Serializer<From, To> {
+public abstract class Serializer<From, To> {
 
-	To serialize(From from);
+	public abstract To serialize(From from);
 
-	From deserialize(To to, Type toType);
+	public abstract From deserialize(To to, Type toType);
+
+	@SuppressWarnings("unchecked")
+	public final <F extends From> F deserialize(To to, Class<F> toType) {
+		return (F) deserialize(to, (Type) toType);
+	}
 }
