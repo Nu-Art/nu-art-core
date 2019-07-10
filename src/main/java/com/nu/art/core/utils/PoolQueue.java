@@ -29,7 +29,7 @@ import java.util.Collections;
                    })
 public abstract class PoolQueue<Type> {
 
-	private volatile boolean keepAlive = true;
+	private volatile boolean keepAlive;
 
 	private final ArrayList<Thread> threadPool = new ArrayList<>();
 
@@ -54,8 +54,6 @@ public abstract class PoolQueue<Type> {
 			removeThreadFromPool();
 		}
 	};
-
-	private boolean initialized;
 
 	private boolean addThreadToPool() {
 		synchronized (this.itemsQueue) {
@@ -85,7 +83,7 @@ public abstract class PoolQueue<Type> {
 
 	protected final Thread[] getThreads() {
 		synchronized (this.itemsQueue) {
-			return threadPool.toArray(new Thread[threadPool.size()]);
+			return threadPool.toArray(new Thread[0]);
 		}
 	}
 
@@ -180,10 +178,10 @@ public abstract class PoolQueue<Type> {
 		if (count < 1)
 			throw new BadImplementationException("Threads count request is '" + count + "' but MUST be >= 1");
 
-		if (initialized)
+		if (this.keepAlive)
 			throw new BadImplementationException("PoolQueue instance already initialized!!!");
 
-		this.initialized = true;
+		this.keepAlive = true;
 		for (int i = 0; i < count; i++) {
 			Thread t = new Thread(queueAction, name + " #" + i);
 			t.start();
