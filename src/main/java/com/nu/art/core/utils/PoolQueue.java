@@ -55,6 +55,8 @@ public abstract class PoolQueue<Type> {
 		}
 	};
 
+	private boolean initialized;
+
 	private boolean addThreadToPool() {
 		synchronized (this.itemsQueue) {
 			return threadPool.add(Thread.currentThread());
@@ -72,7 +74,8 @@ public abstract class PoolQueue<Type> {
 			if (itemsQueue.size() == 0) {
 				try {
 					this.itemsQueue.wait();
-				} catch (InterruptedException ignore) {}
+				} catch (InterruptedException ignore) {
+				}
 				return null;
 			}
 
@@ -177,6 +180,10 @@ public abstract class PoolQueue<Type> {
 		if (count < 1)
 			throw new BadImplementationException("Threads count request is '" + count + "' but MUST be >= 1");
 
+		if (initialized)
+			throw new BadImplementationException("PoolQueue instance already initialized!!!");
+
+		this.initialized = true;
 		for (int i = 0; i < count; i++) {
 			Thread t = new Thread(queueAction, name + " #" + i);
 			t.start();
