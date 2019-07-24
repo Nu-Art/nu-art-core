@@ -28,35 +28,43 @@ import java.util.HashMap;
                    })
 public class TimeProxy {
 
-	private static final TimeProxy instance = new TimeProxy();
+	private static TimeProxy instance;
 	private static final String DefaultTimeProvider = "System";
+
+	public static TimeProxy getInstance() {
+		if (instance == null) {
+			instance = new TimeProxy();
+			addTimeProvider(new TimeProvider() {
+				@Override
+				public String getName() {
+					return DefaultTimeProvider;
+				}
+
+				@Override
+				public long currentTimeMillis() {
+					return System.currentTimeMillis();
+				}
+			});
+		}
+
+		return instance;
+	}
 
 	private final HashMap<String, TimeProvider> allTimeProviders = new HashMap<>();
 
 	private TimeProxy() {
-		addTimeProvider(new TimeProvider() {
-			@Override
-			public String getName() {
-				return DefaultTimeProvider;
-			}
-
-			@Override
-			public long currentTimeMillis() {
-				return System.currentTimeMillis();
-			}
-		});
 	}
 
 	public static TimeProvider[] getAllProviders() {
-		return ArrayTools.asArray(instance.allTimeProviders.values(), TimeProvider.class);
+		return ArrayTools.asArray(getInstance().allTimeProviders.values(), TimeProvider.class);
 	}
 
 	public static void addTimeProvider(TimeProvider timeProvider) {
-		instance._addTimeProvider(timeProvider);
+		getInstance()._addTimeProvider(timeProvider);
 	}
 
 	public static TimeProvider getTimeProvider(String providerKey) {
-		return instance._getTimeProvider(providerKey);
+		return getInstance()._getTimeProvider(providerKey);
 	}
 
 	public static long currentTimeMillis() {
@@ -72,7 +80,7 @@ public class TimeProxy {
 	}
 
 	private TimeProvider _getTimeProvider(String providerKey) {
-		return instance.allTimeProviders.get(providerKey);
+		return getInstance().allTimeProviders.get(providerKey);
 	}
 
 	public interface TimeProvider {
