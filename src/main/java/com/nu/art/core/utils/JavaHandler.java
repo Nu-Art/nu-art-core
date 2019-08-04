@@ -7,8 +7,16 @@ import java.util.Comparator;
 public final class JavaHandler {
 
 	private boolean running = true;
-	private Thread thread;
+	private final ArrayList<Thread> threadPool = new ArrayList<>();
 	private final Executable _cache = new Executable(0, null);
+	private final Object lock = new Object();
+	private final ArrayList<Executable> queue = new ArrayList<>();
+
+	private int minThreads = 1;
+	private int maxThreads = 1;
+	private int threadTimeoutMs = 10000;
+
+	private String name;
 
 	private class Executable {
 
@@ -40,61 +48,102 @@ public final class JavaHandler {
 		}
 	}
 
+	public JavaHandler setThreadTimeoutMs(int threadTimeoutMs) {
+		this.threadTimeoutMs = threadTimeoutMs;
+		if (this.threadTimeoutMs < 1000)
+			this.threadTimeoutMs = 1000;
+
+		return this;
+	}
+
+	public JavaHandler setMaxThreads(int maxThreads) {
+		this.maxThreads = maxThreads;
+		return this;
+	}
+
+	public JavaHandler setMinThreads(int minThreads) {
+		this.minThreads = minThreads;
+		return this;
+	}
+
 	public final synchronized JavaHandler start(String name) {
-		if (thread != null)
+		if (this.name != null)
 			throw new RuntimeException("instance already started with name: " + name);
 
-		thread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				running = true;
-				while (running) {
-					execute();
-					synchronized (lock) {
-						try {
-							if (queue.size() == 0) {
-								lock.wait();
-								continue;
-							}
+		this.name = name;
+		running = true;
 
-							long sleepInterval = queue.get(0).when - System.currentTimeMillis();
-							if (sleepInterval < 30)
-								continue;
+		for (int i = 0; i < minThreads; i++) {
+			final Thread thread = new Thread(new Runnable() {
+				long mark;
 
-							lock.wait(sleepInterval - 5);
-						} catch (InterruptedException ignore) {}
+				boolean keepAlive = true;
+
+				private void execute() {
+					while (running && keepAlive) {
+						Executable executable;
+						synchronized (lock) {
+							if (queue.size() == 0)
+								return;
+
+							if (queue.get(0).when > System.currentTimeMillis() + 50)
+								return;
+
+							executable = queue.remove(0);
+						}
+
+						executable.toExecute.run();
+						mark = System.currentTimeMillis();
 					}
 				}
+
+				@Override
+				public void run() {
+					while (running && keepAlive) {
+						execute();
+						if (System.currentTimeMillis() - mark > threadTimeoutMs && isDisposable()) {
+							keepAlive = false;
+							continue;
+						}
+
+						synchronized (lock) {
+							try {
+								if (queue.size() == 0) {
+									lock.wait(threadTimeoutMs);
+									continue;
+								}
+
+								long sleepInterval = queue.get(0).when - System.currentTimeMillis();
+								if (sleepInterval < 30)
+									continue;
+
+								lock.wait(sleepInterval - 5);
+							} catch (InterruptedException ignore) {}
+						}
+					}
+
+					synchronized (lock) {
+						threadPool.remove(Thread.currentThread());
+					}
+				}
+
+				private boolean isDisposable() {
+					return false;
+				}
+			}, this.name + "-" + threadPool.size());
+
+			synchronized (lock) {
+				threadPool.add(thread);
 			}
-		}, name);
-		thread.start();
+
+			thread.start();
+		}
 		return this;
 	}
 
 	public void stop() {
 		running = false;
 	}
-
-	private void execute() {
-		while (running) {
-			Executable executable;
-			synchronized (lock) {
-				if (queue.size() == 0)
-					return;
-
-				if (queue.get(0).when > System.currentTimeMillis() + 50)
-					return;
-
-				executable = queue.remove(0);
-			}
-
-			executable.toExecute.run();
-		}
-	}
-
-	private final Object lock = new Object();
-
-	private ArrayList<Executable> queue = new ArrayList<>();
 
 	public int getItemsCount() {
 		synchronized (lock) {
