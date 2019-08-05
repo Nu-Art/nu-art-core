@@ -1,22 +1,31 @@
-package com.nu.art.core.archiver;
+package com.nu.art.core.handler;
 
+import com.nu.art.belog.BeLogged;
+import com.nu.art.belog.Logger;
 import com.nu.art.core.utils.JavaHandler;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import static com.nu.art.belog.loggers.JavaLogger.Config_FastJavaLogger;
 
 /**
  * Created by TacB0sS on 24/09/2017.
  */
 
-public class Test_JavaHandler {
-
-	long startedAt;
+public class Test_JavaHandler
+	extends Test_HandlerCore {
 
 	@Test
 	public void test_Handler() {
+		BeLogged.getInstance().setConfig(Config_FastJavaLogger);
+		JavaHandler.DebugFlag.enable();
 
 		final JavaHandler handler = new JavaHandler();
+		handler.setLogger(this);
 		handler.setMinThreads(3);
+		handler.setThreadTimeoutMs(1000);
+		handler.setMaxThreads(7);
 		handler.start("test-handler");
 
 		final PrintRunnable printRunnableNH = new PrintRunnable("N-H", 1200);
@@ -40,10 +49,14 @@ public class Test_JavaHandler {
 		};
 
 		startedAt = System.currentTimeMillis();
+		for (int i = 0; i < 8; i++) {
+			handler.post(new SleepRunnable(i, 2000));
+		}
 
 		for (PrintRunnable runnable : items) {
 			handler.post(runnable.delay, runnable);
 		}
+
 		handler.post(800, new Runnable() {
 			@Override
 			public void run() {
@@ -52,7 +65,7 @@ public class Test_JavaHandler {
 				handler.post(printRunnableNH.delay, printRunnableNH);
 			}
 		});
-		handler.post(5000, new Runnable() {
+		handler.post(10000, new Runnable() {
 			@Override
 			public void run() {
 				log("Terminate");
@@ -69,36 +82,6 @@ public class Test_JavaHandler {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		}
-	}
-
-	private void log(String message) {
-		System.out.println(String.format("%6dms: ", (System.currentTimeMillis() - startedAt)) + Thread.currentThread().getName() + " - " + message);
-	}
-
-	private void logError(String message) {
-		System.err.println(message);
-	}
-
-	private class PrintRunnable
-		implements Runnable {
-
-		final String string;
-
-		final int delay;
-
-		private PrintRunnable(String string) {
-			this(string, 0);
-		}
-
-		private PrintRunnable(String string, int delay) {
-			this.string = string;
-			this.delay = delay;
-		}
-
-		@Override
-		public void run() {
-			log(string);
 		}
 	}
 }
