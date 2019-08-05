@@ -21,7 +21,8 @@ package com.nu.art.core.constants.language;
 public enum Country {
 	Israel(Language.Hebrew),
 	Netherlands(Language.Dutch),
-	USA(Language.English),;
+	USA(Language.English),
+	;
 
 	private final Language language;
 

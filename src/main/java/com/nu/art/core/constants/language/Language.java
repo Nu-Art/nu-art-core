@@ -84,7 +84,8 @@ public enum Language {
 	Urdu("Urdu", "ur"),
 	Vietnamese("Vietnamese", "vi"),
 	Welsh("Welsh", "cy"),
-	Yiddish("Yiddish", "yi"),;
+	Yiddish("Yiddish", "yi"),
+	;
 
 	private final String name;
 
