@@ -1,8 +1,6 @@
 package com.nu.art.core.handler;
 
 import com.nu.art.belog.BeLogged;
-import com.nu.art.belog.Logger;
-import com.nu.art.core.handler.Test_HandlerCore.PrintRunnable;
 import com.nu.art.core.utils.JavaHandler;
 
 import org.junit.Test;
@@ -19,21 +17,23 @@ public class Test_SimpleQueue
 	@Test
 	public void test_Handler() {
 		BeLogged.getInstance().setConfig(Config_FastJavaLogger);
-		JavaHandler.DebugFlag.enable();
+		JavaHandler.DebugThreads.enable();
+		JavaHandler.DebugExecutionTime.enable();
 
 		final JavaHandler handler = new JavaHandler();
 		handler.setLogger(this);
 		handler.setMinThreads(3);
-		handler.setThreadTimeoutMs(1000);
+		handler.setThreadTimeoutMs(5000);
 		handler.setMaxThreads(7);
 		handler.start("test-handler");
 
 		startedAt = System.currentTimeMillis();
 		for (int i = 0; i < 20; i++) {
-			handler.post(i * 500, new SleepRunnable(i, 2000));
+			int delay = i * 500;
+			handler.post(delay, "Sleeping for: " + 2000 + "ms", new SleepRunnable(i, 2000));
 		}
 
-		handler.post(20000, new Runnable() {
+		handler.post(20000, "terminating", new Runnable() {
 			@Override
 			public void run() {
 				log("Terminate");
