@@ -1,5 +1,6 @@
 package com.nu.art.core.utils;
 
+import com.nu.art.core.generics.Processor;
 import com.nu.art.core.interfaces.ILogger;
 import com.nu.art.core.utils.DebugFlags.DebugFlag;
 
@@ -27,6 +28,7 @@ public final class JavaHandler
 	private int maxThreads = 1;
 	private int threadTimeoutMs = 10000;
 	private String name;
+	private Processor<Thread> threadInitiator;
 
 	private boolean running = true;
 
@@ -91,6 +93,11 @@ public final class JavaHandler
 		return this;
 	}
 
+	public JavaHandler setThreadInitiator(Processor<Thread> threadInitiator) {
+		this.threadInitiator = threadInitiator;
+		return this;
+	}
+
 	public JavaHandler setMaxThreads(int maxThreads) {
 		this.maxThreads = maxThreads;
 		return this;
@@ -123,6 +130,8 @@ public final class JavaHandler
 			@Override
 			public void run() {
 				Thread thread = Thread.currentThread();
+				if (threadInitiator != null)
+					threadInitiator.process(Thread.currentThread());
 
 				long sleep;
 				while (running && keepAlive) {

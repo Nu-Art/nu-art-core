@@ -19,6 +19,7 @@
 package com.nu.art.core.utils;
 
 import com.nu.art.core.exceptions.runtime.BadImplementationException;
+import com.nu.art.core.generics.Processor;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +35,8 @@ public abstract class PoolQueue<Type> {
 	private final ArrayList<Thread> threadPool = new ArrayList<>();
 
 	private final ArrayList<Type> itemsQueue = new ArrayList<>();
+
+	private Processor<Thread> threadInitiator;
 
 	private final Runnable queueAction = new Runnable() {
 
@@ -55,8 +58,15 @@ public abstract class PoolQueue<Type> {
 		}
 	};
 
+	public PoolQueue<Type> setThreadInitiator(Processor<Thread> threadInitiator) {
+		this.threadInitiator = threadInitiator;
+		return this;
+	}
+
 	private boolean addThreadToPool() {
 		synchronized (this.itemsQueue) {
+			if (threadInitiator != null)
+				threadInitiator.process(Thread.currentThread());
 			return threadPool.add(Thread.currentThread());
 		}
 	}
