@@ -284,14 +284,18 @@ public final class JavaHandler
 
 		synchronized (lock) {
 			_cache.toExecute = action;
-
+			_Executable removedExecutable = null;
 			int indexOf = queue.indexOf(_cache);
-			if (indexOf == -1)
-				return false;
 
-			_Executable removedExecutable = queue.remove(indexOf);
+			if (indexOf != -1) { // remove runnable if exists in queue
+				removedExecutable = queue.remove(indexOf);
+			}
+			String name = "nameless action: " + action.getClass().getName();
+			if (removedExecutable != null)
+				name = removedExecutable.name;
+
 			if (when > 0) {
-				queue.add(new _Executable(when, removedExecutable.name, action));
+				queue.add(new _Executable(when, name, action));
 				sortQueue();
 				lock.notify();
 			}
